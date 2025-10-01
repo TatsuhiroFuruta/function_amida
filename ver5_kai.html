@@ -45,19 +45,22 @@
 
     #endButton {
       font-size: 1.2rem;
-      margin-top: 20px;
+      /* margin-top: 20px; */
+      margin: 20px auto;
       padding: 10px 20px;
+      display: none;
     }
   </style>
 </head>
 
 <body>
-
+  <!-- 開始画面 -->
   <section id="title" class="active">
     <h1>あみだくじ</h1>
     <button id="toSettings">スタート</button>
   </section>
 
+  <!-- 設定画面 -->
   <section id="settings">
     <h2>設定</h2>
     <label>人数: <input type="number" id="numPlayers" min="2" value="3"></label><br>
@@ -66,11 +69,13 @@
     <button id="startGame">開始する</button>
   </section>
 
+  <!-- 阿弥陀籤画面 -->
   <section id="amida">
     <h2 id="currentPlayerTitle"></h2>
     <canvas id="amidaCanvas" width="400" height="500"></canvas>
     <div id="start-buttons"></div>
-    <button id="endButton" style="display:none;">終了する</button>
+    <!-- <button id="endButton" style="display:none;">終了する</button> -->
+     <button id="endButton">終了する</button>
   </section>
 
   <script>
@@ -86,12 +91,14 @@
     let topY = 20;
     let bottomY = 480;
 
+    // 設定画面への遷移
     document.getElementById('toSettings').onclick = () => {
       showSection('settings');
       updateNameInputs();
     };
     document.getElementById('numPlayers').oninput = updateNameInputs;
 
+    // 人数入力後
     function updateNameInputs() {
       numPlayers = parseInt(document.getElementById('numPlayers').value);
       const div = document.getElementById('nameInputs');
@@ -101,6 +108,7 @@
       }
     }
 
+    // 阿弥陀籤画面への遷移
     document.getElementById('startGame').onclick = () => {
       numPlayers = parseInt(document.getElementById('numPlayers').value);
       numLadders = parseInt(document.getElementById('numLadders').value);
@@ -177,7 +185,8 @@
       for (const r of results) {
         ctx.fillStyle = 'blue';
         ctx.font = '14px sans-serif';
-        ctx.fillText(r.player, columnWidth * (r.goal + 1) - 20, canvas.height - 5);
+        // ctx.fillText(r.player, columnWidth * (r.goal + 1) - 20, canvas.height - 5);
+        ctx.fillText(r.player, r.goal - 20, canvas.height - 5);
       }
     }
 
@@ -188,6 +197,7 @@
       }
     }
 
+    // 列を選択するボタン
     function setupStartButtons() {
       const startButtons = document.getElementById('start-buttons');
       startButtons.innerHTML = '';
@@ -217,6 +227,7 @@
         document.getElementById('endButton').style.display = 'block';
         return;
       }
+      // goal は関数名ではなく、引数。下記の animateAmida 関数の引数の関数において、無名関数を引数としている。
       animateAmida(choices[i], goal => {
         results.push({ player: playerNames[i], goal: goal });
         drawAmida();
@@ -231,6 +242,7 @@
       let state = "down"; // down or horizontal
       let targetX = x;
       const step = 2; // 下り速度
+      // console.log(callback);
 
       const interval = setInterval(() => {
         if (state === "down") {
@@ -247,11 +259,12 @@
             // 横移動に切り替え
             if (nearLadder.from === xIndex) {
               xIndex = nearLadder.to;
-              targetX = columnWidth * (xIndex + 1);
+              // targetX = columnWidth * (xIndex + 1);
             } else {
               xIndex = nearLadder.from;
-              targetX = columnWidth * (xIndex + 1);
+              // targetX = columnWidth * (xIndex + 1);
             }
+            targetX = columnWidth * (xIndex + 1);
             state = "horizontal";
           } else {
             y += step; // 縦移動
@@ -294,6 +307,7 @@
 
         if (y > canvas.height - 20) {
           clearInterval(interval);
+          // results オブジェクトの goal に x が登録される。
           callback(x);
         }
       }, 16);
