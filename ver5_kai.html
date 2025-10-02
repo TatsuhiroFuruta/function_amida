@@ -86,6 +86,7 @@
     let currentIndex = 0;
     let results = [];
     let choices = []; //各プレイヤーの選んだ列
+    let chosen_col;
     let ctx, canvas;
     let columnWidth;
     let topY = 20;
@@ -110,6 +111,7 @@
 
     // 阿弥陀籤画面への遷移
     document.getElementById('startGame').onclick = () => {
+      document.getElementById('endButton').style.display = 'none';
       numPlayers = parseInt(document.getElementById('numPlayers').value);
       numLadders = parseInt(document.getElementById('numLadders').value);
       playerNames = [];
@@ -119,6 +121,7 @@
       currentIndex = 0;
       results = [];
       choices = [];
+      chosen_col = new Array( numPlayers ); // 選ばれた列番号に対応するプレイヤーの名前
       showSection('amida');
       setupAmida();
     };
@@ -149,6 +152,14 @@
       }
 
       drawAmida();
+
+      // for (let i = 0; i < numPlayers; i++) {
+      //   ctx.fillStyle = 'blue';
+      //   ctx.font = '14px sans-serif';
+      //   // ctx.fillText(r.player, columnWidth * (r.goal + 1) - 20, canvas.height - 5);
+      //   ctx.fillText(`列${i + 1}`, columnWidth * (i + 1) -15, topY -5 );
+      // }
+
       showCurrentPlayer();
       setupStartButtons();
     }
@@ -157,6 +168,15 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.strokeStyle = '#333';
       ctx.lineWidth = 2;
+
+      for (let i = 0; i < numPlayers; i++) {
+        ctx.fillStyle = 'blue';
+        ctx.font = '14px sans-serif';
+        // ctx.fillText(r.player, columnWidth * (r.goal + 1) - 20, canvas.height - 5);
+        // playerIndex = choices[i]
+        // ctx.fillText(playerNames[playerIndex] || `列${i + 1}`, columnWidth * (i + 1) -15, topY -5 );
+        ctx.fillText(chosen_col[i] || `列${i + 1}`, columnWidth * (i + 1) -15, topY -5 );
+      }
 
       // 縦線
       for (let i = 0; i < numPlayers; i++) {
@@ -211,8 +231,10 @@
 
     function chooseColumn(colIndex) {
       choices[currentIndex] = colIndex; //選んだ列だけ記録
+      chosen_col[colIndex] = playerNames[currentIndex]
       currentIndex++;
       if (currentIndex < playerNames.length) {
+        drawAmida();
         showCurrentPlayer();
       } else {
         //全員選び終わり
