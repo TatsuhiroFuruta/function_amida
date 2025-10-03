@@ -247,13 +247,14 @@
       choices[currentIndex] = colIndex; //選んだ列だけ記録
       chosen_col[colIndex] = playerNames[currentIndex]
       currentIndex++;
+      drawAmida();
       if (currentIndex < playerNames.length) {
-        drawAmida();
+        // drawAmida();
         showCurrentPlayer();
       } else {
         //全員選び終わり
-        document.getElementById('start-buttons').innerHTML = '';
-        document.getElementById('currentPlayerTitle').textContent = '全員の選択完了！順に結果を表示します';
+        // document.getElementById('start-buttons').innerHTML = '';
+        // document.getElementById('currentPlayerTitle').textContent = '全員の選択完了！順に結果を表示します';
         startSequentialAnimation(0);
       }
     }
@@ -261,21 +262,36 @@
     function removeColumnButton(colIndex) {
       const col_btn = document.getElementById(`column-${colIndex}`);
       // col_btn.style.display = 'none';
-      if(col_btn !== null) col_btn.remove();
-      // if(col_btn !== null) col_btn.style.display = 'none';
+      // if(col_btn !== null) col_btn.remove();
+      if(col_btn !== null) col_btn.style.display = 'none';
     }
 
+    // 阿弥陀籤の結果確認
     function startSequentialAnimation(i) {
+      const startButtons = document.getElementById('start-buttons');
+      startButtons.innerHTML = '';
       if (i >= playerNames.length) {
         document.getElementById('endButton').style.display = 'block';
         return;
       }
-      // goal は関数名ではなく、引数。下記の animateAmida 関数の引数の関数において、無名関数を引数としている。
-      animateAmida(choices[i], goal => {
-        results.push({ player: playerNames[i], goal: goal });
-        drawAmida();
-        startSequentialAnimation(i + 1); //次の人
+      // // goal は関数名ではなく、引数。下記の animateAmida 関数の引数の関数において、無名関数を引数としている。
+      // animateAmida(choices[i], goal => {
+      //   results.push({ player: playerNames[i], goal: goal });
+      //   drawAmida();
+      //   startSequentialAnimation(i + 1); //次の人
+      // });
+      document.getElementById('currentPlayerTitle').textContent = `${playerNames[i]}さんの番です！`;
+      const btn = document.createElement('button');
+      btn.textContent = `スタート`;
+      btn.addEventListener('click', () => {
+        // goal は関数名ではなく、引数。下記の animateAmida 関数の引数の関数において、無名関数を引数としている。
+        animateAmida(choices[i], goal => {
+          results.push({ player: playerNames[i], goal: goal });
+          drawAmida();
+          startSequentialAnimation(i + 1); //次の人
+        });
       });
+      startButtons.appendChild(btn);
     }
 
     function animateAmida(col, callback) {
@@ -345,7 +361,7 @@
         drawAmida();
         ctx.fillStyle = 'red';
         ctx.beginPath();
-        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.arc(x, y, 8, 0, Math.PI * 2);
         ctx.fill();
 
         if (y > canvas.height - 20) {

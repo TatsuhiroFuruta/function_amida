@@ -224,7 +224,21 @@
       for (let i = 0; i < numPlayers; i++) {
         const btn = document.createElement('button');
         btn.textContent = `列${i + 1}`;
-        btn.onclick = () => chooseColumn(i);
+        btn.id = `column-${i}`;
+        // btn.onclick = () => chooseColumn(i);
+        btn.addEventListener('click', () => {
+          chooseColumn(i);
+          removeColumnButton(i);
+        });
+        // btn.addEventListener('click', () => {
+        //   removeColumnButton(i);
+        // });
+        // btn.addEventListener('load', () => {
+        //   removeColumnButton(i);
+        // });
+        // btn.addEventListener('DOMContentLoaded', () => {
+        //   removeColumnButton(i);
+        // });
         startButtons.appendChild(btn);
       }
     }
@@ -242,6 +256,13 @@
         document.getElementById('currentPlayerTitle').textContent = '全員の選択完了！順に結果を表示します';
         startSequentialAnimation(0);
       }
+    }
+
+    function removeColumnButton(colIndex) {
+      const col_btn = document.getElementById(`column-${colIndex}`);
+      // col_btn.style.display = 'none';
+      if(col_btn !== null) col_btn.remove();
+      // if(col_btn !== null) col_btn.style.display = 'none';
     }
 
     function startSequentialAnimation(i) {
