@@ -72,10 +72,10 @@
   <!-- 阿弥陀籤画面 -->
   <section id="amida">
     <h2 id="currentPlayerTitle"></h2>
-    <canvas id="amidaCanvas" width="400" height="500"></canvas>
+    <canvas id="amidaCanvas" width="700" height="500"></canvas>
     <div id="start-buttons"></div>
     <!-- <button id="endButton" style="display:none;">終了する</button> -->
-     <button id="endButton">終了する</button>
+    <button id="endButton">終了する</button>
   </section>
 
   <script>
@@ -105,7 +105,8 @@
       const div = document.getElementById('nameInputs');
       div.innerHTML = '';
       for (let i = 0; i < numPlayers; i++) {
-        div.innerHTML += `<label>名前${i + 1}: <input type="text" id="name${i}" value="名前${i + 1}"></label><br>`;
+        // div.innerHTML += `<label>名前${i + 1}: <input type="text" id="name${i}" value="名前${i + 1}"></label><br>`;
+        div.innerHTML += `<label>名前${i + 1}: <input type="text" id="name${i}" value="", placeholder="プレイヤー${i + 1}" ></label><br>`;
       }
     }
 
@@ -116,12 +117,12 @@
       numLadders = parseInt(document.getElementById('numLadders').value);
       playerNames = [];
       for (let i = 0; i < numPlayers; i++) {
-        playerNames.push(document.getElementById(`name${i}`).value || `名前${i + 1}`);
+        playerNames.push(document.getElementById(`name${i}`).value || `プレイヤー${i + 1}`);
       }
       currentIndex = 0;
       results = [];
       choices = [];
-      chosen_col = new Array( numPlayers ); // 選ばれた列番号に対応するプレイヤーの名前
+      chosen_col = new Array(numPlayers); // 選ばれた列番号に対応するプレイヤーの名前
       showSection('amida');
       setupAmida();
     };
@@ -137,6 +138,7 @@
 
     function setupAmida() {
       canvas = document.getElementById('amidaCanvas');
+      // canvas.style.writingMode = 'vertical-rl';
       ctx = canvas.getContext('2d');
       columnWidth = canvas.width / (numPlayers + 1);
 
@@ -175,7 +177,10 @@
         // ctx.fillText(r.player, columnWidth * (r.goal + 1) - 20, canvas.height - 5);
         // playerIndex = choices[i]
         // ctx.fillText(playerNames[playerIndex] || `列${i + 1}`, columnWidth * (i + 1) -15, topY -5 );
-        ctx.fillText(chosen_col[i] || `列${i + 1}`, columnWidth * (i + 1) -15, topY -5 );
+        // ctx.fillText(chosen_col[i] || `列${i + 1}`, columnWidth * (i + 1) - 15, topY - 5);
+        ctx.textAlign = 'center';
+        // ctx.fillText(chosen_col[i] || `列${i + 1}`, columnWidth * (i + 1) - 15, topY - 5);
+        ctx.fillText(chosen_col[i] || `列${i + 1}`, columnWidth * (i + 1), topY - 5);
       }
 
       // 縦線
@@ -206,7 +211,8 @@
         ctx.fillStyle = 'blue';
         ctx.font = '14px sans-serif';
         // ctx.fillText(r.player, columnWidth * (r.goal + 1) - 20, canvas.height - 5);
-        ctx.fillText(r.player, r.goal - 20, canvas.height - 5);
+        // ctx.fillText(r.player, r.goal - 20, canvas.height - 5);
+        ctx.fillText(r.player, r.goal, canvas.height - 5);
       }
     }
 
@@ -245,7 +251,8 @@
 
     function chooseColumn(colIndex) {
       choices[currentIndex] = colIndex; //選んだ列だけ記録
-      chosen_col[colIndex] = playerNames[currentIndex]
+      // chosen_col[colIndex] = playerNames[currentIndex].length < 6 ? playerNames[currentIndex] : `P${currentIndex + 1}`;
+      chosen_col[colIndex] = playerNames[currentIndex];
       currentIndex++;
       drawAmida();
       if (currentIndex < playerNames.length) {
@@ -263,7 +270,7 @@
       const col_btn = document.getElementById(`column-${colIndex}`);
       // col_btn.style.display = 'none';
       // if(col_btn !== null) col_btn.remove();
-      if(col_btn !== null) col_btn.style.display = 'none';
+      if (col_btn !== null) col_btn.style.display = 'none';
     }
 
     // 阿弥陀籤の結果確認
