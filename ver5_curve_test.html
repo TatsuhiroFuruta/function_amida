@@ -144,14 +144,27 @@
 
       // 横線生成
       ladders = [];
-      for (let i = 0; i < numLadders; i++) {
-        // const x = Math.floor(Math.random()*(numPlayers-1)) + 1; //列間
-        const xIndex = Math.floor(Math.random() * (numPlayers - 1));
-        // const y = Math.random() * (canvas.height - 50) + 25;
-        const y = Math.floor(Math.random() * (bottomY - 60)) + 40;
-        // ladders.push({col:x, y:y});
-        ladders.push({ y, from: xIndex, to: xIndex + 1 });
-      }
+    //   for (let i = 0; i < numLadders; i++) {
+    //     // const x = Math.floor(Math.random()*(numPlayers-1)) + 1; //列間
+    //     const xIndex = Math.floor(Math.random() * (numPlayers - 1));
+    //     // const y = Math.random() * (canvas.height - 50) + 25;
+    //     const y = Math.floor(Math.random() * (bottomY - 60)) + 40;
+    //     // ladders.push({col:x, y:y});
+    //     ladders.push({ y, from: xIndex, to: xIndex + 1 });
+    //   }
+    // テスト用
+    // 横線
+    //   let xIndex = 0;
+    //   let y = 41;
+    //   ladders.push({ y, from: xIndex, to: xIndex + 1 });
+
+    //   // xIndex = Math.floor(Math.random() * (numPlayers - 1));
+    //   y = 43;
+    //   ladders.push({ y, from: xIndex, to: xIndex + 1 });
+
+      let xIndex = 0;
+      let y = 40;
+      ladders.push({ y, from: xIndex, to: xIndex + 1 });
 
       drawAmida();
 
@@ -197,13 +210,51 @@
       // 横線
       for (const ladder of ladders) {
         ctx.beginPath();
+        drawExponentialFunction(ladder);
+        // const x1 = columnWidth * (ladder.from + 1);
+        // const x2 = columnWidth * (ladder.to + 1);
+        // // ctx.moveTo(columnWidth*ladder.col, ladder.y);
+        // // ctx.lineTo(columnWidth*(ladder.col+1), ladder.y);
+        // ctx.moveTo(x1, ladder.y);
+        // ctx.lineTo(x2, ladder.y);
+        ctx.stroke();
+      }
+
+      function drawExponentialFunction(ladder) {
+        // 軸のスケール設定
         const x1 = columnWidth * (ladder.from + 1);
         const x2 = columnWidth * (ladder.to + 1);
-        // ctx.moveTo(columnWidth*ladder.col, ladder.y);
-        // ctx.lineTo(columnWidth*(ladder.col+1), ladder.y);
-        ctx.moveTo(x1, ladder.y);
-        ctx.lineTo(x2, ladder.y);
-        ctx.stroke();
+        const xMin = -2;
+        const xMax = 2;
+        const yMin = 0;
+        const yMax = Math.exp(xMax); // e^x の最大値
+        // ladders.push({ x: { from: xIndex, to: xIndex + 1 },
+        //   y: { from: yMin, to: yMax }
+        // });
+
+        // ctx.beginPath();
+        let started = false;
+        for (let x = xMin; x <= xMax; x += 0.01) {
+          const y = Math.exp(x);
+          const px = toCanvasX(x);
+          const py = toCanvasY(y);
+          if (!started) {
+            ctx.moveTo(px, py);
+            started = true;
+          } else {
+            ctx.lineTo(px, py);
+          }
+        }
+        // ctx.stroke();
+
+      }
+
+      // 変換（座標→canvas ピクセル）
+      function toCanvasX(x) {
+        return (x - xMin) / (xMax - xMin) * width;
+      }
+      function toCanvasY(y) {
+        return height - (y - yMin) / (yMax - yMin) * height;
       }
 
       // ゴール名

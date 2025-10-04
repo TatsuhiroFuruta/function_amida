@@ -22,6 +22,7 @@
 <body>
 <h2>指数関数 $y = e^x$ のグラフ</h2>
 <h2>指数関数 $e^x$ のグラフ</h2>
+<!-- <canvas id="graph" width="500" height="400"></canvas> -->
 <canvas id="graph" width="500" height="400"></canvas>
 
 <script>
@@ -39,10 +40,14 @@ const yMax = Math.exp(xMax); // e^x の最大値
 
 // 変換（座標→canvas ピクセル）
 function toCanvasX(x) {
-  return (x - xMin) / (xMax - xMin) * width;
+  // return (x - xMin) / (xMax - xMin) * width;
+  return (x - xMin) / (xMax - xMin) * 100.0;
+  // return (x - xMin) / (xMax - xMin) * 1.0;
 }
 function toCanvasY(y) {
-  return height - (y - yMin) / (yMax - yMin) * height;
+  // return height - (y - yMin) / (yMax - yMin) * height;
+  return height - (y - yMin) / (yMax - yMin) * 100;
+  // return 1.0 - (y - yMin) / (yMax - yMin) * 1.0;
 }
 
 // 座標軸を描画
@@ -62,10 +67,15 @@ ctx.beginPath();
 let started = false;
 for (let x = xMin; x <= xMax; x += 0.01) {
   const y = Math.exp(x);
-  const px = toCanvasX(x);
-  const py = toCanvasY(y);
+  // 見せる（スケール等）座標は toCanvas関数で！！平行移動はtoCanvas関数の外側で足して調整する。
+  // y方向で上にずらす時には、負の数で加える。
+  // const px = toCanvasX(x);
+  // const py = toCanvasY(y);
+  const px = toCanvasX(x)+400;
+  const py = toCanvasY(y)-100;
   if (!started) {
     ctx.moveTo(px, py);
+    // ctx.moveTo(x, height-y);
     started = true;
   } else {
     ctx.lineTo(px, py);
