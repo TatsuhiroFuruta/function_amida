@@ -20,8 +20,8 @@
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 </head>
 <body>
-<h2>指数関数 $y = e^x$ のグラフ</h2>
-<h2>指数関数 $e^x$ のグラフ</h2>
+<h2>三角関数 $y = \cos(x)$ のグラフ</h2>
+<h2>三角関数 $ \cos(x)$ のグラフ</h2>
 <!-- <canvas id="graph" width="500" height="400"></canvas> -->
 <canvas id="graph" width="500" height="400"></canvas>
 
@@ -33,20 +33,36 @@ const width = canvas.width;
 const height = canvas.height;
 
 // 軸のスケール設定
-const xMin = -2;
-const xMax = 2;
-const yMin = 0;
-const yMax = Math.exp(xMax); // e^x の最大値
+const xMin = 0.0;
+const xMax = Math.PI * 2.0;
+// const yMin = Math.cos(xMin); // cos(x) の最小値
+// const yMax = Math.cos(xMax); // cos(x) の最大値
+const yMin = -2.0; // cos(x) の最小値
+const yMax = 2.0; // cos(x) の最大値
 
 // 変換（座標→canvas ピクセル）
 function toCanvasX(x) {
-  // return (x - xMin) / (xMax - xMin) * width;
-  return (x - xMin) / (xMax - xMin) * 100.0;
+  return (x - xMin) / (xMax - xMin) * width;
+  // return (x - xMin) / (xMax - xMin) * 50;
+  // return (x - xMin) / (xMax - xMin) * 100.0;
   // return (x - xMin) / (xMax - xMin) * 1.0;
 }
 function toCanvasY(y) {
+  return height - (y - yMin) / (yMax - yMin) * height;
+  // return height - (y - yMin) / (yMax - yMin) * 50;
+  // return height - (y - yMin) / (yMax - yMin) * 20;
+  // return 1.0 - (y - yMin) / (yMax - yMin) * 1.0;
+}
+
+function toCanvasX_hat(x) {
+  // return (x - xMin) / (xMax - xMin) * width;
+  return (x - xMin) / (xMax - xMin) * 50;
+  // return (x - xMin) / (xMax - xMin) * 100.0;
+  // return (x - xMin) / (xMax - xMin) * 1.0;
+}
+function toCanvasY_hat(y) {
   // return height - (y - yMin) / (yMax - yMin) * height;
-  return height - (y - yMin) / (yMax - yMin) * 100;
+  return height - (y - yMin) / (yMax - yMin) * 40 - 30;
   // return 1.0 - (y - yMin) / (yMax - yMin) * 1.0;
 }
 
@@ -66,13 +82,13 @@ ctx.strokeStyle = 'blue';
 ctx.beginPath();
 let started = false;
 for (let x = xMin; x <= xMax; x += 0.01) {
-  const y = Math.exp(x);
+  const y = Math.cos(x);
   // 見せる（スケール等）座標は toCanvas関数で！！平行移動はtoCanvas関数の外側で足して調整する。
   // y方向で上にずらす時には、負の数で加える。
-  // const px = toCanvasX(x);
-  // const py = toCanvasY(y);
-  const px = toCanvasX(x)+400;
-  const py = toCanvasY(y)-100;
+  const px = toCanvasX(x);
+  const py = toCanvasY(y);
+  // const px = toCanvasX(x)+400;
+  // const py = toCanvasY(y)-100;
   if (!started) {
     ctx.moveTo(px, py);
     // ctx.moveTo(x, height-y);
@@ -82,6 +98,28 @@ for (let x = xMin; x <= xMax; x += 0.01) {
   }
 }
 ctx.stroke();
+
+// // グラフを描画2 (y=e^x)
+// ctx.strokeStyle = 'green';
+// ctx.beginPath();
+// started = false;
+// for (let x = xMin; x <= xMax; x += 0.01) {
+//   const y = Math.exp(x);
+//   // 見せる（スケール等）座標は toCanvas関数で！！平行移動はtoCanvas関数の外側で足して調整する。
+//   // y方向で上にずらす時には、負の数で加える。
+//   const px = toCanvasX_hat(x);
+//   const py = toCanvasY_hat(y);
+//   // const px = toCanvasX(x)+400;
+//   // const py = toCanvasY(y)-100;
+//   if (!started) {
+//     ctx.moveTo(px, py);
+//     // ctx.moveTo(x, height-y);
+//     started = true;
+//   } else {
+//     ctx.lineTo(px, py);
+//   }
+// }
+// ctx.stroke();
 
 // 補助グリッドや目盛りをつけたい場合は追加で描画できます
 </script>
