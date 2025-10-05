@@ -163,8 +163,24 @@
     //   ladders.push({ y, from: xIndex, to: xIndex + 1 });
 
       let xIndex = 0;
-      let y = 40;
+      let y = 180;
       ladders.push({ y, from: xIndex, to: xIndex + 1 });
+
+      // xIndex = 0;
+      // y = 80;
+      // ladders.push({ y, from: xIndex, to: xIndex + 1 });
+
+      // xIndex = 0;
+      // y = 120;
+      // ladders.push({ y, from: xIndex, to: xIndex + 1 });
+
+      // xIndex = 0;
+      // y = 200;
+      // ladders.push({ y, from: xIndex, to: xIndex + 1 });
+
+      // xIndex = 0;
+      // y = 500;
+      // ladders.push({ y, from: xIndex, to: xIndex + 1 });
 
       drawAmida();
 
@@ -220,6 +236,11 @@
         ctx.stroke();
       }
 
+      ctx.fillStyle = 'red';
+      ctx.beginPath();
+      ctx.arc(0, 380, 8, 0, Math.PI * 2);
+      ctx.fill();
+
       function drawExponentialFunction(ladder) {
         // 軸のスケール設定
         const x1 = columnWidth * (ladder.from + 1);
@@ -234,10 +255,10 @@
 
         // ctx.beginPath();
         let started = false;
-        for (let x = xMin; x <= xMax; x += 0.01) {
-          const y = Math.exp(x);
-          const px = toCanvasX(x);
-          const py = toCanvasY(y);
+        for (let draw_x = xMin; draw_x <= xMax; draw_x += 0.01) {
+          const draw_y = Math.exp(draw_x);
+          const px = toCanvasX(draw_x, xMin, xMax, x1, x2);
+          const py = toCanvasY(draw_y, yMin, yMax, ladder.y, x1, x2);
           if (!started) {
             ctx.moveTo(px, py);
             started = true;
@@ -250,11 +271,24 @@
       }
 
       // 変換（座標→canvas ピクセル）
-      function toCanvasX(x) {
-        return (x - xMin) / (xMax - xMin) * width;
+      function toCanvasX(draw_x, xMin, xMax, x1, x2) {
+        // return (x - xMin) / (xMax - xMin) * width;
+        width = x2 - x1;
+        // width = canvas.width;
+        // width = x1 + 40;
+        // return (draw_x - xMin) / (xMax - xMin) * width + x1;
+        return (draw_x - xMin) / (xMax - xMin) * width + x1;
       }
-      function toCanvasY(y) {
-        return height - (y - yMin) / (yMax - yMin) * height;
+      function toCanvasY(draw_y, yMin, yMax, y, x1, x2) {
+        // height = 140;
+        // height = canvas.height/(6 + 1);
+        height = canvas.height;
+        height_hat = canvas.height/canvas.width * (x2-x1);
+        // return height - (draw_y - yMin) / (yMax - yMin) * height;
+        // return height * (1.0 - (draw_y - yMin) / (yMax - yMin)) + y;
+        // return height * (1.0 - (draw_y - yMin) / (yMax - yMin));
+        // return height - (draw_y - yMin) / (yMax - yMin) * height_hat - (height-y);
+        return - (draw_y - yMin) / (yMax - yMin) * height_hat + y;
       }
 
       // ゴール名
