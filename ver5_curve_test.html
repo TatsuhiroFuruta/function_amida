@@ -82,6 +82,7 @@
     let playerNames = [];
     let numPlayers = 3;
     let numLadders = 5;
+    let points = [];
     let ladders = [];
     let currentIndex = 0;
     let results = [];
@@ -91,6 +92,11 @@
     let columnWidth;
     let topY = 20;
     let bottomY = 480;
+    const xMin = 0.0;//-2;
+    const xMax = 2*Math.PI; //2;
+    // const yMin = 0;
+    const yMin = -1.0;//Math.exp(xMin);
+    const yMax = 1.0;//Math.exp(xMax); // e^x の最大値
 
     // 設定画面への遷移
     document.getElementById('toSettings').onclick = () => {
@@ -162,9 +168,25 @@
     //   y = 43;
     //   ladders.push({ y, from: xIndex, to: xIndex + 1 });
 
+      points = [];
       let xIndex = 0;
-      let y = 180;
-      ladders.push({ y, from: xIndex, to: xIndex + 1 });
+      let y_from = 180;
+      x1 = columnWidth * (xIndex + 1);
+      x2 = columnWidth * (xIndex + 2);
+      function ladderExponential(xIndex, y_from) {
+        // 曲線の座標配列
+        for (let x = xMin; x <= xMax; x += 0.01) {
+          // const y = Math.exp(x);
+          const y = Math.cos(x);
+          points.push({ x: toCanvasX(x, xMin, xMax, x1, x2), y: toCanvasY(y, yMin, yMax, y_from, x1, x2) });
+        }
+      }
+      // let xIndex = 0;
+      // let y = 180;
+      ladderExponential(xIndex, y_from);
+      // exp と cos 確認済み。y_from は始点のy座標でなく、グラフの幅の終点（左下部分）のy座標であることに注意。
+      // ladders.push({ x: {from: xIndex, to: xIndex + 1 }, y: {from: y_from, to: points[points.length-1].y} });
+      ladders.push({ x: { from: xIndex, to: xIndex + 1 }, y: { from: points[0].y, to: points[points.length-1].y } });
 
       // xIndex = 0;
       // y = 80;
@@ -245,50 +267,34 @@
         // 軸のスケール設定
         const x1 = columnWidth * (ladder.from + 1);
         const x2 = columnWidth * (ladder.to + 1);
-        const xMin = -2;
-        const xMax = 2;
-        const yMin = 0;
-        const yMax = Math.exp(xMax); // e^x の最大値
+        // const xMin = -2;
+        // const xMax = 2;
+        // const yMin = 0;
+        // const yMax = Math.exp(xMax); // e^x の最大値
         // ladders.push({ x: { from: xIndex, to: xIndex + 1 },
         //   y: { from: yMin, to: yMax }
         // });
 
-        // ctx.beginPath();
-        let started = false;
-        for (let draw_x = xMin; draw_x <= xMax; draw_x += 0.01) {
-          const draw_y = Math.exp(draw_x);
-          const px = toCanvasX(draw_x, xMin, xMax, x1, x2);
-          const py = toCanvasY(draw_y, yMin, yMax, ladder.y, x1, x2);
-          if (!started) {
-            ctx.moveTo(px, py);
-            started = true;
-          } else {
-            ctx.lineTo(px, py);
-          }
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+          ctx.lineTo(points[i].x, points[i].y);
         }
+
+        // ctx.beginPath();
+        // let started = false;
+        // for (let draw_x = xMin; draw_x <= xMax; draw_x += 0.01) {
+        //   const draw_y = Math.exp(draw_x);
+        //   const px = toCanvasX(draw_x, xMin, xMax, x1, x2);
+        //   const py = toCanvasY(draw_y, yMin, yMax, ladder.y, x1, x2);
+        //   if (!started) {
+        //     ctx.moveTo(px, py);
+        //     started = true;
+        //   } else {
+        //     ctx.lineTo(px, py);
+        //   }
+        // }
         // ctx.stroke();
 
-      }
-
-      // 変換（座標→canvas ピクセル）
-      function toCanvasX(draw_x, xMin, xMax, x1, x2) {
-        // return (x - xMin) / (xMax - xMin) * width;
-        width = x2 - x1;
-        // width = canvas.width;
-        // width = x1 + 40;
-        // return (draw_x - xMin) / (xMax - xMin) * width + x1;
-        return (draw_x - xMin) / (xMax - xMin) * width + x1;
-      }
-      function toCanvasY(draw_y, yMin, yMax, y, x1, x2) {
-        // height = 140;
-        // height = canvas.height/(6 + 1);
-        height = canvas.height;
-        height_hat = canvas.height/canvas.width * (x2-x1);
-        // return height - (draw_y - yMin) / (yMax - yMin) * height;
-        // return height * (1.0 - (draw_y - yMin) / (yMax - yMin)) + y;
-        // return height * (1.0 - (draw_y - yMin) / (yMax - yMin));
-        // return height - (draw_y - yMin) / (yMax - yMin) * height_hat - (height-y);
-        return - (draw_y - yMin) / (yMax - yMin) * height_hat + y;
       }
 
       // ゴール名
@@ -299,6 +305,27 @@
         // ctx.fillText(r.player, r.goal - 20, canvas.height - 5);
         ctx.fillText(r.player, r.goal, canvas.height - 5);
       }
+    }
+
+    // 変換（座標→canvas ピクセル）
+    function toCanvasX(draw_x, xMin, xMax, x1, x2) {
+      // return (x - xMin) / (xMax - xMin) * width;
+      width = x2 - x1;
+      // width = canvas.width;
+      // width = x1 + 40;
+      // return (draw_x - xMin) / (xMax - xMin) * width + x1;
+      return (draw_x - xMin) / (xMax - xMin) * width + x1;
+    }
+    function toCanvasY(draw_y, yMin, yMax, y, x1, x2) {
+      // height = 140;
+      // height = canvas.height/(6 + 1);
+      height = canvas.height;
+      height_hat = canvas.height/canvas.width * (x2-x1);
+      // return height - (draw_y - yMin) / (yMax - yMin) * height;
+      // return height * (1.0 - (draw_y - yMin) / (yMax - yMin)) + y;
+      // return height * (1.0 - (draw_y - yMin) / (yMax - yMin));
+      // return height - (draw_y - yMin) / (yMax - yMin) * height_hat - (height-y);
+      return - (draw_y - yMin) / (yMax - yMin) * height_hat + y;
     }
 
     function showCurrentPlayer() {
@@ -375,7 +402,7 @@
       document.getElementById('currentPlayerTitle').textContent = `${playerNames[i]}さんの番です！`;
       const btn = document.createElement('button');
       btn.textContent = `スタート`;
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
         // goal は関数名ではなく、引数。下記の animateAmida 関数の引数の関数において、無名関数を引数としている。
         animateAmida(choices[i], goal => {
           results.push({ player: playerNames[i], goal: goal });
@@ -393,6 +420,10 @@
       let state = "down"; // down or horizontal
       let targetX = x;
       const step = 2; // 下り速度
+      let x1;
+      let x2;
+      let ladder_Y;
+      let idx = 0;
       // console.log(callback);
 
       const interval = setInterval(() => {
@@ -400,7 +431,11 @@
           // 横線チェック
           // const nearLadder = ladders.find(l=>Math.abs(l.y - y) < 2 && (l.col===xIndex||l.col===xIndex-1));
           const nearLadder = ladders.find(l =>
-            Math.abs(l.y - y) < 2 && (l.from === xIndex || l.to === xIndex));
+            // Math.abs(l.y - y) < 2 && (l.from === xIndex || l.to === xIndex));
+            // Math.abs(l.y.from - y) < 2 && (l.x.from === xIndex || l.x.to === xIndex));
+            // Math.abs(l.y.from - y) < 2 && l.x.from === xIndex );
+            (l.x.from === xIndex && Math.abs(l.y.from - y) < 2) || (l.x.to === xIndex && Math.abs(l.y.to - y) < 2)
+          );
           // if (nearLadder) {
           //   // 横移動
           //   // if (nearLadder.col===xIndex) xIndex++;
@@ -408,14 +443,19 @@
           // }
           if (nearLadder) {
             // 横移動に切り替え
-            if (nearLadder.from === xIndex) {
-              xIndex = nearLadder.to;
+            if (nearLadder.x.from === xIndex) {
+              xIndex = nearLadder.x.to;
+              idx = 0;
               // targetX = columnWidth * (xIndex + 1);
-            } else {
-              xIndex = nearLadder.from;
+            } else if (nearLadder.x.to === xIndex) {
+              xIndex = nearLadder.x.from;
+              idx = points.length-1;
               // targetX = columnWidth * (xIndex + 1);
             }
             targetX = columnWidth * (xIndex + 1);
+            // x1 = columnWidth * (nearLadder.from + 1);
+            // x2 = columnWidth * (nearLadder.to + 1);
+            // ladder_Y = nearLadder.y;
             state = "horizontal";
           } else {
             y += step; // 縦移動
@@ -426,27 +466,43 @@
         } else if (state === "horizontal") {
           // 横線を徐々に移動
           let dx = targetX - x;
-          // console.log(targetX);
+          // console.log('targetX:'+targetX);
           // console.log(x);
           // console.log(dx);
           // console.log('xIndex:'+xIndex);
-          if (Math.abs(dx) < 1) {
+          // if (Math.abs(dx) < 1) {
+          if ((Math.sign(dx) > 0 && idx >= points.length) || (Math.sign(dx) < 0 && idx <= 0)) {
             state = "down"; // 横移動終わり
-            // console.log(y);
+            // console.log(idx);
+            // console.log('dx:'+dx);
+            // console.log('y:'+y);
             // console.log(horizontalLines[0].y-y);
             y += step + 1;
+            // y += step + 2;
+            // y += step;
             // y += 2;
             // y += 3;
             // y += 9;
             // y += 1;
             // console.log(y);
             // console.log(l.y-y);
+            // idx = 0;
           } else {
+            // console.log('y:'+y);
             // x += dx / 5;
             // x += dx / 10;
             // console.log(Math.sign(dx));
-            x += Math.sign(dx);
+            // x += Math.sign(dx);
+            // y -= Math.sign(dx);
+            // y -= Math.exp(x);
+            // y += toCanvasY(Math.exp(x), yMin, yMax, ladder_Y, x1, x2);
             // console.log(x);
+            // console.log('idx:'+idx);
+            // idx += 1;
+            p = points[idx];
+            x = p.x;
+            y = p.y;
+            idx += Math.sign(dx);
           }
           // y += step;
         }
