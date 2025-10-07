@@ -11,7 +11,7 @@
 </style>
 </head>
 <body>
-<h2>y = atan(x) の曲線上をボールが往復する</h2>
+<h2>y = tan(x) の曲線上をボールが往復する</h2>
 <canvas id="graph" width="500" height="400"></canvas>
 
 <script>
@@ -21,12 +21,12 @@ const ctx = canvas.getContext('2d');
 const width = canvas.width;
 const height = canvas.height;
 
-const x_range = 8;
+const x_range = Math.atan(8);//Math.PI / 2.2;
 const xMin = -x_range;
 const xMax = x_range;
 
-const yMin = Math.atan(xMin);//-Math.PI / 2;
-const yMax = Math.atan(xMax);//Math.PI / 2;
+const yMin = -8;//Math.tan(xMin);//-Math.PI / 2;
+const yMax = 8;//Math.tan(xMax);//Math.PI / 2;
 
 function toCanvasX(x) {
   return (x - xMin) / (xMax - xMin) * width;
@@ -39,7 +39,7 @@ function toCanvasY(y) {
 const points = [];
 for (let x = xMin; x <= xMax; x += 0.01) {
 //   const y = Math.exp(x);
-  const y = Math.atan(x);
+  const y = Math.tan(x);
   points.push({x: toCanvasX(x), y: toCanvasY(y)});
 }
 
