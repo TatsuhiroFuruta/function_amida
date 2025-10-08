@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>指数関数のグラフ</title>
+<style>
+  canvas {
+    border: 1px solid #ccc;
+  }
+</style>
+<script>
+    // 文章中に数式を挿入するのを登録
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+</head>
+<body>
+<h2>指数関数 $y = e^x$ のグラフ</h2>
+<h2>指数関数 $e^x$ のグラフ</h2>
+<!-- <canvas id="graph" width="500" height="400"></canvas> -->
+<canvas id="graph" width="500" height="400"></canvas>
+
+<script>
+const canvas = document.getElementById('graph');
+const ctx = canvas.getContext('2d');
+
+const width = canvas.width;
+const height = canvas.height;
+
+// 軸のスケール設定
+const xMin = -2;
+const xMax = 2;
+const yMin = 0;
+const yMax = Math.exp(xMax); // e^x の最大値
+
+// 変換（座標→canvas ピクセル）
+function toCanvasX(x) {
+  return (x - xMin) / (xMax - xMin) * width;
+  // return (x - xMin) / (xMax - xMin) * 50;
+  // return (x - xMin) / (xMax - xMin) * 100.0;
+  // return (x - xMin) / (xMax - xMin) * 1.0;
+}
+function toCanvasY(y) {
+  return height - (y - yMin) / (yMax - yMin) * height;
+  // return height - (y - yMin) / (yMax - yMin) * 50;
+  // return height - (y - yMin) / (yMax - yMin) * 20;
+  // return 1.0 - (y - yMin) / (yMax - yMin) * 1.0;
+}
+
+function toCanvasX_hat(x) {
+  // return (x - xMin) / (xMax - xMin) * width;
+  return (x - xMin) / (xMax - xMin) * 50;
+  // return (x - xMin) / (xMax - xMin) * 100.0;
+  // return (x - xMin) / (xMax - xMin) * 1.0;
+}
+function toCanvasY_hat(y) {
+  // return height - (y - yMin) / (yMax - yMin) * height;
+  return height - (y - yMin) / (yMax - yMin) * 40 - 30;
+  // return 1.0 - (y - yMin) / (yMax - yMin) * 1.0;
+}
+
+// 座標軸を描画
+ctx.strokeStyle = '#000';
+ctx.beginPath();
+// x軸
+ctx.moveTo(0, toCanvasY(0));
+ctx.lineTo(width, toCanvasY(0));
+// y軸
+ctx.moveTo(toCanvasX(0), 0);
+ctx.lineTo(toCanvasX(0), height);
+ctx.stroke();
+
+// グラフを描画 (y=e^x)
+ctx.strokeStyle = 'blue';
+ctx.beginPath();
+let started = false;
+for (let x = xMin; x <= xMax; x += 0.01) {
+  const y = Math.exp(x);
+  // 見せる（スケール等）座標は toCanvas関数で！！平行移動はtoCanvas関数の外側で足して調整する。
+  // y方向で上にずらす時には、負の数で加える。
+  const px = toCanvasX(x);
+  const py = toCanvasY(y);
+  // const px = toCanvasX(x)+400;
+  // const py = toCanvasY(y)-100;
+  if (!started) {
+    ctx.moveTo(px, py);
+    // ctx.moveTo(x, height-y);
+    started = true;
+  } else {
+    ctx.lineTo(px, py);
+  }
+}
+ctx.stroke();
+
+// グラフを描画2 (y=e^x)
+ctx.strokeStyle = 'green';
+ctx.beginPath();
+started = false;
+for (let x = xMin; x <= xMax; x += 0.01) {
+  const y = Math.exp(x);
+  // 見せる（スケール等）座標は toCanvas関数で！！平行移動はtoCanvas関数の外側で足して調整する。
+  // y方向で上にずらす時には、負の数で加える。
+  const px = toCanvasX_hat(x);
+  const py = toCanvasY_hat(y);
+  // const px = toCanvasX(x)+400;
+  // const py = toCanvasY(y)-100;
+  if (!started) {
+    ctx.moveTo(px, py);
+    // ctx.moveTo(x, height-y);
+    started = true;
+  } else {
+    ctx.lineTo(px, py);
+  }
+}
+ctx.stroke();
+
+// 補助グリッドや目盛りをつけたい場合は追加で描画できます
+</script>
+</body>
+</html>
