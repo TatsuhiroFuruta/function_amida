@@ -92,11 +92,11 @@
     let columnWidth;
     let topY = 20;
     let bottomY = 480;
-    const xMin = -5;//-1;//-1;//Math.atan(-8);//0.01;//-1;//-1;//-2;//0;//-8.0;//0.0;//-2.0;
-    const xMax = 5;//1;//1;//Math.atan(8);//3;//1;//1;//2;//2*Math.PI;//8.0;//2.0*Math.PI; //2.0;
+    const xMin = -5;//-3;//-3;//-5;//-1;//-1;//Math.atan(-8);//0.01;//-1;//-1;//-2;//0;//-8.0;//0.0;//-2.0;
+    const xMax = 5;//3;//3;//5;//1;//1;//Math.atan(8);//3;//1;//1;//2;//2*Math.PI;//8.0;//2.0*Math.PI; //2.0;
     // const yMin = 0;
-    const yMin = -1;//0;//-Math.PI/2;//-8;//Math.log(xMin);//-1;//Math.exp(xMin);//Math.atan(xMin);//-1.0;//Math.exp(xMin);
-    const yMax = 1;//Math.PI;//Math.PI/2;//8;//Math.log(xMax);//1;//Math.exp(xMax);//Math.atan(xMax);//1.0;//Math.exp(xMax); // e^x の最大値
+    const yMin = -1;//1;//-11;//-1;//0;//-Math.PI/2;//-8;//Math.log(xMin);//-1;//Math.exp(xMin);//Math.atan(xMin);//-1.0;//Math.exp(xMin);
+    const yMax = 1;//10;//11;//1;//Math.PI;//Math.PI/2;//8;//Math.log(xMax);//1;//Math.exp(xMax);//Math.atan(xMax);//1.0;//Math.exp(xMax); // e^x の最大値
 
     // 設定画面への遷移
     document.getElementById('toSettings').onclick = () => {
@@ -187,6 +187,8 @@
           // const y = Math.asin(x);
           // const y = Math.acos(x);
           const y = Math.tanh(x);
+          // const y = Math.sinh(x);
+          // const y = Math.cosh(x);
           points.push({ x: toCanvasX(x, xMin, xMax, x1, x2), y: toCanvasY(y, yMin, yMax, y_from, x1, x2) });
         }
       }
