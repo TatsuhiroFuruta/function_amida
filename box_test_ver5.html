@@ -51,6 +51,9 @@
       display: none;
     }
   </style>
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script> -->
 </head>
 
 <body>
@@ -64,7 +67,7 @@
   <section id="settings">
     <h2>設定</h2>
     <label>人数: <input type="number" id="numPlayers" min="2" value="3"></label><br>
-    <label>横線の数: <input type="number" id="numLadders" min="1" value="5"></label><br>
+    <label>通路の数: <input type="number" id="numLadders" min="1" value="5"></label><br>
     <div id="nameInputs"></div>
     <button id="startGame">開始する</button>
   </section>
@@ -92,11 +95,11 @@
     let columnWidth;
     let topY = 20;
     let bottomY = 480;
-    const xMin = -5;//-3;//-3;//-5;//-1;//-1;//Math.atan(-8);//0.01;//-1;//-1;//-2;//0;//-8.0;//0.0;//-2.0;
-    const xMax = 5;//3;//3;//5;//1;//1;//Math.atan(8);//3;//1;//1;//2;//2*Math.PI;//8.0;//2.0*Math.PI; //2.0;
+    const xMin = 0.01;//-5;//-3;//-3;//-5;//-1;//-1;//Math.atan(-8);//0.01;//-1;//-1;//-2;//0;//-8.0;//0.0;//-2.0;
+    const xMax = 3;//5;//3;//3;//5;//1;//1;//Math.atan(8);//3;//1;//1;//2;//2*Math.PI;//8.0;//2.0*Math.PI; //2.0;
     // const yMin = 0;
-    const yMin = -1;//1;//-11;//-1;//0;//-Math.PI/2;//-8;//Math.log(xMin);//-1;//Math.exp(xMin);//Math.atan(xMin);//-1.0;//Math.exp(xMin);
-    const yMax = 1;//10;//11;//1;//Math.PI;//Math.PI/2;//8;//Math.log(xMax);//1;//Math.exp(xMax);//Math.atan(xMax);//1.0;//Math.exp(xMax); // e^x の最大値
+    const yMin = Math.log(xMin);//-1;//1;//-11;//-1;//0;//-Math.PI/2;//-8;//Math.log(xMin);//-1;//Math.exp(xMin);//Math.atan(xMin);//-1.0;//Math.exp(xMin);
+    const yMax = Math.log(xMax);//1;//10;//11;//1;//Math.PI;//Math.PI/2;//8;//Math.log(xMax);//1;//Math.exp(xMax);//Math.atan(xMax);//1.0;//Math.exp(xMax); // e^x の最大値
 
     // 設定画面への遷移
     document.getElementById('toSettings').onclick = () => {
@@ -182,11 +185,12 @@
           // const y = Math.sin(x);
           // const y = Math.exp(-x);
           // const y = -x;
-          // const y = Math.log(x);
+          // const y = x;
+          const y = Math.log(x);
           // const y = Math.tan(x);
           // const y = Math.asin(x);
           // const y = Math.acos(x);
-          const y = Math.tanh(x);
+          // const y = Math.tanh(x);
           // const y = Math.sinh(x);
           // const y = Math.cosh(x);
           points.push({ x: toCanvasX(x, xMin, xMax, x1, x2), y: toCanvasY(y, yMin, yMax, y_from, x1, x2) });
@@ -197,7 +201,7 @@
       ladderExponential(xIndex, y_from);
       // exp と cos 確認済み。y_from は始点のy座標でなく、グラフの幅の終点（左下部分）のy座標であることに注意。
       // ladders.push({ x: {from: xIndex, to: xIndex + 1 }, y: {from: y_from, to: points[points.length-1].y} });
-      ladders.push({ x: { from: xIndex, to: xIndex + 1 }, y: { from: points[0].y, to: points[points.length-1].y } });
+      ladders.push({ x: { from: xIndex, to: xIndex + 1 }, y: { from: points[0].y, to: points[points.length-1].y }, boxVisible: true });
 
       // xIndex = 0;
       // y = 80;
@@ -216,6 +220,7 @@
       // ladders.push({ y, from: xIndex, to: xIndex + 1 });
 
       drawAmida();
+      // drawFunctionBox(canvas, columnWidth,'tanh');
 
       // for (let i = 0; i < numPlayers; i++) {
       //   ctx.fillStyle = 'blue';
@@ -267,6 +272,9 @@
         // ctx.moveTo(x1, ladder.y);
         // ctx.lineTo(x2, ladder.y);
         ctx.stroke();
+        // stroke の外側に書いたらうまくいった。
+        // drawFunctionBox(canvas, columnWidth,'tanh');
+        drawFunctionBox(canvas, columnWidth,'log', ladder.boxVisible);
       }
 
       ctx.fillStyle = 'red';
@@ -337,6 +345,89 @@
       // return height * (1.0 - (draw_y - yMin) / (yMax - yMin));
       // return height - (draw_y - yMin) / (yMax - yMin) * height_hat - (height-y);
       return - (draw_y - yMin) / (yMax - yMin) * height_hat + y;
+    }
+
+    function drawFunctionBox (canvas, columnWidth, functionName, boxVisible) {
+      if (boxVisible) {
+        ctx.fillStyle='cyan';
+        const drawHeight = canvas.height/canvas.width*columnWidth;
+        ctx.fillRect(columnWidth,180-drawHeight,columnWidth,drawHeight);
+        ctx.strokeRect(columnWidth,180-drawHeight,columnWidth,drawHeight);
+        if (functionName === 'tanh') {
+          // renderKatexToCanvas('y = \\tanh(x)', columnWidth,180-drawHeight,columnWidth,drawHeight);
+          // renderKatexToCanvas('e^{x}', columnWidth,180-drawHeight,columnWidth,drawHeight);
+          ctx.fillStyle = 'black';
+          ctx.textAlign = 'center';
+          ctx.font = "24px 'STIX Two Math', serif";
+          ctx.fillText(`tanh(x)`, 1.52*columnWidth,180-0.45*drawHeight);
+          //  ctx.fillText(`cosh(x)`, 1.52*columnWidth,180-0.45*drawHeight);
+          // ctx.fillText(`sinh(x)`, 1.52*columnWidth,180-0.45*drawHeight);
+          // ctx.fillText(`tan(x)`, 1.52*columnWidth,180-0.45*drawHeight);
+          // ctx.fillText(`cos(x)`, 1.52*columnWidth,180-0.45*drawHeight);
+          // ctx.fillText(`sin(x)`, 1.52*columnWidth,180-0.45*drawHeight);
+          // ctx.fillText(`arctan(x)`, 1.52*columnWidth,180-0.45*drawHeight);
+          // ctx.fillText(`arccos(x)`, 1.52*columnWidth,180-0.45*drawHeight);
+          // ctx.fillText(`arcsin(x)`, 1.52*columnWidth,180-0.45*drawHeight);
+          // ctx.fillText(`log(x)`, 1.52*columnWidth,180-0.45*drawHeight);
+          // ctx.font = "36px 'STIX Two Math', serif";
+          // ctx.fillText(`e`, 1.52*columnWidth,180-0.45*drawHeight);
+          // ctx.fillText(`x`, 1.52*columnWidth,180-0.45*drawHeight);
+          // ctx.fillText(`-x`, 1.52*columnWidth,180-0.45*drawHeight);
+          // ctx.font = "20px 'STIX Two Math', serif";
+          // ctx.fillText(`x`, 1.52*columnWidth+15,180-0.45*drawHeight-15);
+          // ctx.fillText(`-x`, 1.52*columnWidth,180-0.45*drawHeight);
+        } else if (functionName === 'log') {
+          ctx.fillStyle = 'black';
+          ctx.textAlign = 'center';
+          ctx.font = "24px 'STIX Two Math', serif";
+          ctx.fillText(`log(x)`, 1.52*columnWidth,180-0.45*drawHeight);
+        }
+      }
+    }
+
+    async function renderKatexToCanvas(latexString, x, y, width, height) {
+      // const canvas = document.getElementById('myCanvas');
+      // const ctx = canvas.getContext('2d');
+
+      // ctx.fillStyle='cyan';
+      // const drawHeight = canvas.height/canvas.width*columnWidth;
+      // ctx.fillRect(x, y, width, height);
+      // ctx.strokeRect(x, y, width, height);
+      // ctx.clearRect(x, y, width, height);
+      // 一時的なコンテナを作成
+      const tempDiv = document.createElement('div');
+      tempDiv.style.position = 'absolute';
+      tempDiv.style.left = '-9999px';
+      tempDiv.style.top = '0px';
+      // tempDiv.style.background = 'white';
+      tempDiv.style.padding = '10px';
+      tempDiv.style.border = '2px solid';
+      // tempDiv.style.display = 'none';
+      // tempDiv.style.visibility = 'hidden';
+      document.body.appendChild(tempDiv);
+
+      try {
+        // KaTeXで数式をレンダリング
+        katex.render(latexString, tempDiv, {
+          throwOnError: false,
+          displayMode: true
+        });
+
+        // html2canvasを使ってcanvasに描画
+        const canvasElement = await html2canvas(tempDiv, {
+          backgroundColor: 'cyan',
+          scale: 2
+        });
+
+        // 生成されたcanvasをメインcanvasに描画
+        ctx.drawImage(canvasElement, x, y, width, height);
+
+      } catch (error) {
+        console.error('レンダリングエラー:', error);
+      } finally {
+        // 一時要素を削除
+        document.body.removeChild(tempDiv);
+      }
     }
 
     function showCurrentPlayer() {
@@ -415,6 +506,7 @@
       btn.textContent = `スタート`;
       btn.addEventListener('click', (e) => {
         // goal は関数名ではなく、引数。下記の animateAmida 関数の引数の関数において、無名関数を引数としている。
+        e.target.style.display = 'none';
         animateAmida(choices[i], goal => {
           results.push({ player: playerNames[i], goal: goal });
           drawAmida();
@@ -453,6 +545,7 @@
           //   // else if (nearLadder.col===xIndex-1) xIndex--;
           // }
           if (nearLadder) {
+            nearLadder.boxVisible = false;
             // 横移動に切り替え
             if (nearLadder.x.from === xIndex) {
               xIndex = nearLadder.x.to;
