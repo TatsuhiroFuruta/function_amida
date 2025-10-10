@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>KaTeX → Canvas 例</title>
+  <!-- KaTeX CSS & JS -->
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.23/dist/katex.min.css" integrity="sha384-//SZkxyB7axjCAopkAL1E1rve+ZSPKapD89Lo/lLhcsXR+zOYl5z6zJZEFXil+q0" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.23/dist/katex.min.js" integrity="sha384-cpAIxua0Xbyc+XrpHQpCtJzGSZ6U2kS/FeyoKjnS+BgAYNV6uVUetVs/LC9+l3rs" crossorigin="anonymous"></script>
+  <!-- <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.23/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script> -->
+</head>
+<body>
+  <canvas id="myCanvas" width="500" height="250" style="border:1px solid #000"></canvas>
+  <h1>$${y=e^x}$$</h1>
+
+  <script>
+    // KaTeX のスクリプトがロードされた後に実行
+    window.addEventListener('load', () => {
+      const ctx = document.getElementById('myCanvas').getContext('2d');
+      const latex = 'x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}';
+      ctx.font = "28px 'Computer Modern'";
+      ctx.fillText("x", 100, 100);
+      ctx.fillText("2", 115, 90); // 上付き
+
+      // 1️⃣ KaTeX で SVG文字列を生成
+      const svgString = katex.renderToString(latex, {
+        throwOnError: false,
+        output: "svg",       // ← ここが重要！
+      });
+
+      // 2️⃣ SVG文字列 → Blob → 画像化
+      const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+
+      img.onload = () => {
+        // 3️⃣ Canvasに描画
+        ctx.drawImage(img, 50, 50);
+        // URL.revokeObjectURL(url); // メモリ解放
+      };
+
+      img.src = url;
+    });
+  </script>
+</body>
+</html>
