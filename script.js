@@ -296,6 +296,34 @@ function setupAmida() {
   ctx = canvas.getContext('2d');
   columnWidth = canvas.width / (numPlayers + 1);
 
+  // let xIndex = 0;
+  // let drawBottomY = 180;
+
+  let RandomXIndex;
+  let RandomDrawBottomY;
+  let RandomFunctionNumbers;
+
+  // テストデータの生成
+  numPassages = 1;//3;
+  RandomXIndex = [0];//[0,0,1];
+  RandomDrawBottomY = [180];//[180, 360, 180];
+  RandomFunctionNumbers = [0];//[2, 3, 6];
+
+  for (let i = 0; i < numPassages; i++) {
+    const mF = new mathematicalFunction(f[RandomFunctionNumbers[i]].functionName, f[RandomFunctionNumbers[i]].xMin, f[RandomFunctionNumbers[i]].xMax, f[RandomFunctionNumbers[i]].yMin, f[RandomFunctionNumbers[i]].yMax, f[RandomFunctionNumbers[i]].boxColor, RandomXIndex[i], RandomDrawBottomY[i]);
+    mF.generateFunctionPoints(columnWidth, canvas);
+    mF.generatePassage();
+    mathematicalFunctions.push(mF);
+  }
+
+  // function RandomNumbersGenerateForMathematicalFunction (numPassages) {
+
+    // for (let i = 0; i < numPassages; i++) {
+    //   RandomXIndex =
+    // }
+  // }
+
+  // const mathematicalFunction = new mathematicalFunction;
   // 横線生成
   // passages = [];
   //   for (let i = 0; i < numPassages; i++) {
@@ -317,38 +345,38 @@ function setupAmida() {
   //   passages.push({ y, from: xIndex, to: xIndex + 1 });
 
   // points = [];
-  let xIndex = 0;
-  let drawBottomY = 180;
+  // let xIndex = 0;
+  // let drawBottomY = 180;
   // x1 = columnWidth * (xIndex + 1);
   // x2 = columnWidth * (xIndex + 2);
   // console.log(`x2-x1:${x2-x1}`);
   // console.log(`columnWidth:${columnWidth}`);
 
-  exp1 = new mathematicalFunction(f[2].functionName, f[2].xMin, f[2].xMax, f[2].yMin, f[2].yMax, f[2].boxColor, xIndex, drawBottomY);
+  // exp1 = new mathematicalFunction(f[2].functionName, f[2].xMin, f[2].xMax, f[2].yMin, f[2].yMax, f[2].boxColor, xIndex, drawBottomY);
   // console.log(drawBottomY);
-  exp1.generateFunctionPoints(columnWidth, canvas);
+  // exp1.generateFunctionPoints(columnWidth, canvas);
   // points.push(functionPoints1);
-  exp1.generatePassage();
+  // exp1.generatePassage();
 
-  drawBottomY = 360;
-  exp2 = new mathematicalFunction(f[3].functionName, f[3].xMin, f[3].xMax, f[3].yMin, f[3].yMax, f[3].boxColor, xIndex, drawBottomY);
-  exp2.generateFunctionPoints(columnWidth, canvas);
+  // drawBottomY = 360;
+  // exp2 = new mathematicalFunction(f[3].functionName, f[3].xMin, f[3].xMax, f[3].yMin, f[3].yMax, f[3].boxColor, xIndex, drawBottomY);
+  // exp2.generateFunctionPoints(columnWidth, canvas);
   // points.push(functionPoints2);
-  exp2.generatePassage();
+  // exp2.generatePassage();
   // console.log(exp2.functionPoints.length);
   // console.log(exp2.functionPassage);
 
-  xIndex = 1;
-  drawBottomY = 180;
-  arctan3 = new mathematicalFunction(f[10].functionName, f[10].xMin, f[10].xMax, f[10].yMin, f[10].yMax, f[10].boxColor, xIndex, drawBottomY);
-  arctan3.generateFunctionPoints(columnWidth, canvas);
-  arctan3.generatePassage();
+  // xIndex = 1;
+  // drawBottomY = 180;
+  // arctan3 = new mathematicalFunction(f[10].functionName, f[10].xMin, f[10].xMax, f[10].yMin, f[10].yMax, f[10].boxColor, xIndex, drawBottomY);
+  // arctan3.generateFunctionPoints(columnWidth, canvas);
+  // arctan3.generatePassage();
   // console.log(functionPoints3.length);
   // points.push(functionPoints3);
 
-  mathematicalFunctions.push(exp1);
-  mathematicalFunctions.push(exp2);
-  mathematicalFunctions.push(arctan3);
+  // mathematicalFunctions.push(exp1);
+  // mathematicalFunctions.push(exp2);
+  // mathematicalFunctions.push(arctan3);
   console.log(mathematicalFunctions[0].functionPassage);
 
   function passageExponential(xIndex, drawBottomY) {
@@ -455,13 +483,17 @@ function drawAmida() {
   // }
 
   // ctx.beginPath();
-  exp1.drawFunction(ctx);
-  exp2.drawFunction(ctx);
-  arctan3.drawFunction(ctx);
+  for (let i = 0; i < numPassages; i++) {
+    mathematicalFunctions[i].drawFunction(ctx);
+    mathematicalFunctions[i].drawFunctionBox(columnWidth, canvas, ctx);
+  }
+  // exp1.drawFunction(ctx);
+  // exp2.drawFunction(ctx);
+  // arctan3.drawFunction(ctx);
 
-  exp1.drawFunctionBox(columnWidth, canvas, ctx);
-  exp2.drawFunctionBox(columnWidth, canvas, ctx);
-  arctan3.drawFunctionBox(columnWidth, canvas, ctx);
+  // exp1.drawFunctionBox(columnWidth, canvas, ctx);
+  // exp2.drawFunctionBox(columnWidth, canvas, ctx);
+  // arctan3.drawFunctionBox(columnWidth, canvas, ctx);
   // ctx.stroke();
 
   ctx.fillStyle = 'red';
