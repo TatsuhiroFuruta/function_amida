@@ -307,7 +307,7 @@ function setupAmida() {
   numPassages = 1;//3;
   RandomXIndex = [0];//[0,0,1];
   RandomDrawBottomY = [180];//[180, 360, 180];
-  RandomFunctionNumbers = [0];//[2, 3, 6];
+  RandomFunctionNumbers = [13];//[2, 3, 6];
 
   for (let i = 0; i < numPassages; i++) {
     const mF = new mathematicalFunction(f[RandomFunctionNumbers[i]].functionName, f[RandomFunctionNumbers[i]].xMin, f[RandomFunctionNumbers[i]].xMax, f[RandomFunctionNumbers[i]].yMin, f[RandomFunctionNumbers[i]].yMax, f[RandomFunctionNumbers[i]].boxColor, RandomXIndex[i], RandomDrawBottomY[i]);
