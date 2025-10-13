@@ -1,5 +1,5 @@
 // import { func, mathematicalFunction } from "./mathematical_function.js";
-const func = [
+const f = [
   { functionName: 'x', xMin: -1, xMax: 1, yMin: -1, yMax: 1, boxColor: 'cyan' },
   { functionName: '-x', xMin: -1, xMax: 1, yMin: -1, yMax: 1, boxColor: 'cyan' },
   { functionName: 'expPlus', xMin: -2, xMax: 2, yMin: Math.exp(-2), yMax: Math.exp(2), boxColor: 'cyan' },
@@ -27,30 +27,31 @@ class mathematicalFunction {
     this.xIndex = xIndex;
     this.drawBottomY = drawBottomY;
     this.functionPoints = [];
-    this.functionPassage = [];
+    this.functionPassage;
   }
 
-  generateFunctionPoints(columnWidth, width, height) {
+  generateFunctionPoints(columnWidth, canvas) {
     for (let x = this.xMin; x <= this.xMax; x += 0.01) {
-      const y = Math.exp(x);
+      // const y = Math.exp(x);
+      const y = this.functionType(x);
       // points.push({ x: this.toCanvasX(x, columnWidth), y: this.toCanvasY(y, columnWidth, width, height) });
-      this.functionPoints.push({ x: this.toCanvasX(x, columnWidth), y: this.toCanvasY(y, columnWidth, width, height) });
+      this.functionPoints.push({ x: this.toCanvasX(x, columnWidth), y: this.toCanvasY(y, columnWidth, canvas) });
     }
-    return this.functionPoints;
+    // return this.functionPoints;
   }
 
-  generatePassage(passages) {
-    passages.push({ x: { from: this.xIndex, to: this.xIndex + 1 }, y: { from: this.functionPoints[0].y, to: this.functionPoints[this.functionPoints.length - 1].y }, boxVisible: false });
-    this.functionPassage.push({ x: { from: this.xIndex, to: this.xIndex + 1 }, y: { from: this.functionPoints[0].y, to: this.functionPoints[this.functionPoints.length - 1].y }, boxVisible: false });
+  generatePassage() {
+    this.functionPassage = { x: { from: this.xIndex, to: this.xIndex + 1 }, y: { from: this.functionPoints[0].y, to: this.functionPoints[this.functionPoints.length - 1].y }, boxVisible: true };
+    // passages.push(this.functionPassage);
     // console.log('Hello'+this.functionName);
     // console.log(this.xMin);
   }
 
-  drawFunction(columnWidth, ctx) {
+  drawFunction(ctx) {
     // const startX = columnWidth * (this.functionPassage.from + 1);
     // const endX = columnWidth * (this.functionPassage.to + 1);
 
-    console.log(ctx);
+    // console.log(ctx);
     ctx.beginPath();
     // console.log(this.functionPoints[0].x, this.functionPoints[0].y);
 
@@ -62,16 +63,165 @@ class mathematicalFunction {
     ctx.stroke();
   }
 
+  drawFunctionBox(columnWidth, canvas, ctx) {
+    // console.log(this.functionPassage);
+    // console.log(this.functionPassage.x);
+    // console.log(this.functionPassage.x);
+    // console.log(this.functionPassage.boxVisible);
+    if (this.functionPassage.boxVisible) {
+      // ctx.beginPath();
+      ctx.fillStyle = this.boxColor;
+      const startX = columnWidth * (this.xIndex + 1);
+      const drawHeight = canvas.height / canvas.width * columnWidth;
+      ctx.fillRect(startX, this.drawBottomY - drawHeight, columnWidth, drawHeight);
+      ctx.strokeRect(startX, this.drawBottomY - drawHeight, columnWidth, drawHeight);
+      this.drawFunctionType(ctx, columnWidth, startX, drawHeight);
+      // ctx.stroke();
+    }
+  }
+
+  //通路（曲線）の関数の種類を決める
+  functionType(x) {
+    if (this.functionName === 'x') {
+      return x;
+
+    } else if (this.functionName === '-x') {
+      return -x;
+
+    } else if (this.functionName === 'expPlus') {
+      return Math.exp(x);
+
+    } else if (this.functionName === 'expMinus') {
+      return Math.exp(-x);
+
+    } else if (this.functionName === 'log') {
+      return Math.log(x);
+
+    } else if (this.functionName === 'sin') {
+      return Math.sin(x);
+
+    } else if (this.functionName === 'cos') {
+      return Math.cos(x);
+
+    } else if (this.functionName === 'tan') {
+      return Math.tan(x);
+
+    }  else if (this.functionName === 'arcsin') {
+      return Math.asin(x);
+
+    } else if (this.functionName === 'arccos') {
+      return Math.acos(x);
+
+    } else if (this.functionName === 'arctan') {
+      return Math.atan(x);
+
+    }  else if (this.functionName === 'sinh') {
+      return Math.sinh(x);
+
+    } else if (this.functionName === 'cosh') {
+      return Math.cosh(x);
+
+    } else if (this.functionName === 'tanh') {
+      return Math.tanh(x);
+
+    }
+  }
+
+  //箱の関数名を決める
+  drawFunctionType(ctx, columnWidth, startX, drawHeight) {
+    const drawFunctionStartX = startX+0.52*columnWidth;
+    const drawFunctionStartY = this.drawBottomY-0.45*drawHeight;
+    ctx.fillStyle = 'black';
+    ctx.textAlign = 'center';
+    if (this.functionName === 'x') {
+
+      ctx.font = "36px 'STIX Two Math', serif";
+      ctx.fillText(`x`, drawFunctionStartX,drawFunctionStartY);
+
+    } else if (this.functionName === '-x') {
+
+      ctx.font = "36px 'STIX Two Math', serif";
+      ctx.fillText(`-x`, drawFunctionStartX,drawFunctionStartY);
+
+    } else if (this.functionName === 'expPlus') {
+
+      ctx.font = "36px 'STIX Two Math', serif";
+      ctx.fillText(`e`, drawFunctionStartX,drawFunctionStartY);
+      ctx.font = "20px 'STIX Two Math', serif";
+      ctx.fillText(`x`, drawFunctionStartX+15, drawFunctionStartY-15);
+
+    } else if (this.functionName === 'expMinus') {
+
+      ctx.font = "36px 'STIX Two Math', serif";
+      ctx.fillText(`e`, drawFunctionStartX, drawFunctionStartY);
+      ctx.font = "20px 'STIX Two Math', serif";
+      ctx.fillText(`-x`, 1.52*columnWidth+15,this.drawBottomY-0.45*drawHeight-15);
+
+    } else if (this.functionName === 'log') {
+
+      ctx.font = "24px 'STIX Two Math', serif";
+      ctx.fillText(`log(x)`, drawFunctionStartX, drawFunctionStartY);
+
+    } else if (this.functionName === 'sin') {
+
+      ctx.font = "24px 'STIX Two Math', serif";
+      ctx.fillText(`sin(x)`, drawFunctionStartX, drawFunctionStartY);
+
+    } else if (this.functionName === 'cos') {
+
+      ctx.font = "24px 'STIX Two Math', serif";
+      ctx.fillText(`cos(x)`, drawFunctionStartX, drawFunctionStartY);
+
+    } else if (this.functionName === 'tan') {
+
+      ctx.font = "24px 'STIX Two Math', serif";
+      ctx.fillText(`tan(x)`, drawFunctionStartX, drawFunctionStartY);
+
+    }  else if (this.functionName === 'arcsin') {
+
+      ctx.font = "24px 'STIX Two Math', serif";
+      ctx.fillText(`arcsin(x)`, drawFunctionStartX, drawFunctionStartY);
+
+    } else if (this.functionName === 'arccos') {
+
+      ctx.font = "24px 'STIX Two Math', serif";
+      ctx.fillText(`arccos(x)`, drawFunctionStartX, drawFunctionStartY);
+
+    } else if (this.functionName === 'arctan') {
+
+      ctx.font = "24px 'STIX Two Math', serif";
+      ctx.fillText(`arctan(x)`, drawFunctionStartX, drawFunctionStartY);
+
+    }  else if (this.functionName === 'sinh') {
+
+      ctx.font = "24px 'STIX Two Math', serif";
+      ctx.fillText(`sinh(x)`, drawFunctionStartX, drawFunctionStartY);
+
+    } else if (this.functionName === 'cosh') {
+
+      ctx.font = "24px 'STIX Two Math', serif";
+      ctx.fillText(`cosh(x)`, drawFunctionStartX, drawFunctionStartY);
+
+    } else if (this.functionName === 'tanh') {
+
+      ctx.font = "24px 'STIX Two Math', serif";
+      ctx.fillText(`tanh(x)`, drawFunctionStartX, drawFunctionStartY);
+
+    }
+  }
+
   // 変換（座標→canvas ピクセル）
   toCanvasX(draw_x, columnWidth) {
     const startX = columnWidth * (this.xIndex + 1);
     // const width = x2 - x1;
     return (draw_x - this.xMin) / (this.xMax - this.xMin) * columnWidth + startX;
   }
-  toCanvasY(draw_y, columnWidth, width, height) {
-    const height_hat = height / width * columnWidth;
-    return - (draw_y - this.yMin) / (this.yMax - this.yMin) * height_hat + this.drawBottomY;
+
+  toCanvasY(draw_y, columnWidth, canvas) {
+    const drawHeight = canvas.height / canvas.width * columnWidth;
+    return - (draw_y - this.yMin) / (this.yMax - this.yMin) * drawHeight + this.drawBottomY;
   }
+
 };
 
 // exp = new mathematicalFunction(func[2].functionName, func[2].xMin, func[2].xMax, func[2].yMin, func[2].yMax, func[2].boxColor);
@@ -80,8 +230,8 @@ class mathematicalFunction {
 let playerNames = [];
 let numPlayers = 3;
 let numPassages = 5;
-let points = [];
-let passages = [];
+// let points = [];
+// let passages = [];
 let currentIndex = 0;
 let results = [];
 let choices = []; //各プレイヤーの選んだ列
@@ -95,6 +245,7 @@ const xMax = 3;//5;//3;//3;//5;//1;//1;//Math.atan(8);//3;//1;//1;//2;//2*Math.P
 // const yMin = 0;
 const yMin = Math.log(xMin);//-1;//1;//-11;//-1;//0;//-Math.PI/2;//-8;//Math.log(xMin);//-1;//Math.exp(xMin);//Math.atan(xMin);//-1.0;//Math.exp(xMin);
 const yMax = Math.log(xMax);//1;//10;//11;//1;//Math.PI;//Math.PI/2;//8;//Math.log(xMax);//1;//Math.exp(xMax);//Math.atan(xMax);//1.0;//Math.exp(xMax); // e^x の最大値
+const mathematicalFunctions = [];
 
 // 設定画面への遷移
 document.getElementById('toSettings').onclick = () => {
@@ -145,8 +296,36 @@ function setupAmida() {
   ctx = canvas.getContext('2d');
   columnWidth = canvas.width / (numPlayers + 1);
 
+  // let xIndex = 0;
+  // let drawBottomY = 180;
+
+  let RandomXIndex;
+  let RandomDrawBottomY;
+  let RandomFunctionNumbers;
+
+  // テストデータの生成
+  numPassages = 1;//3;
+  RandomXIndex = [0];//[0,0,1];
+  RandomDrawBottomY = [180];//[180, 360, 180];
+  RandomFunctionNumbers = [13];//[2, 3, 6];
+
+  for (let i = 0; i < numPassages; i++) {
+    const mF = new mathematicalFunction(f[RandomFunctionNumbers[i]].functionName, f[RandomFunctionNumbers[i]].xMin, f[RandomFunctionNumbers[i]].xMax, f[RandomFunctionNumbers[i]].yMin, f[RandomFunctionNumbers[i]].yMax, f[RandomFunctionNumbers[i]].boxColor, RandomXIndex[i], RandomDrawBottomY[i]);
+    mF.generateFunctionPoints(columnWidth, canvas);
+    mF.generatePassage();
+    mathematicalFunctions.push(mF);
+  }
+
+  // function RandomNumbersGenerateForMathematicalFunction (numPassages) {
+
+    // for (let i = 0; i < numPassages; i++) {
+    //   RandomXIndex =
+    // }
+  // }
+
+  // const mathematicalFunction = new mathematicalFunction;
   // 横線生成
-  passages = [];
+  // passages = [];
   //   for (let i = 0; i < numPassages; i++) {
   //     // const x = Math.floor(Math.random()*(numPlayers-1)) + 1; //列間
   //     const xIndex = Math.floor(Math.random() * (numPlayers - 1));
@@ -165,34 +344,40 @@ function setupAmida() {
   //   y = 43;
   //   passages.push({ y, from: xIndex, to: xIndex + 1 });
 
-  points = [];
-  let xIndex = 0;
-  let drawBottomY = 180;
+  // points = [];
+  // let xIndex = 0;
+  // let drawBottomY = 180;
   // x1 = columnWidth * (xIndex + 1);
   // x2 = columnWidth * (xIndex + 2);
   // console.log(`x2-x1:${x2-x1}`);
   // console.log(`columnWidth:${columnWidth}`);
 
-  exp1 = new mathematicalFunction(func[2].functionName, func[2].xMin, func[2].xMax, func[2].yMin, func[2].yMax, func[2].boxColor, xIndex, drawBottomY);
+  // exp1 = new mathematicalFunction(f[2].functionName, f[2].xMin, f[2].xMax, f[2].yMin, f[2].yMax, f[2].boxColor, xIndex, drawBottomY);
   // console.log(drawBottomY);
-  const functionPoints1 = exp1.generateFunctionPoints(columnWidth, canvas.width, canvas.height);
-  points.push(functionPoints1);
-  exp1.generatePassage(passages);
+  // exp1.generateFunctionPoints(columnWidth, canvas);
+  // points.push(functionPoints1);
+  // exp1.generatePassage();
 
-  drawBottomY = 360;
-  exp2 = new mathematicalFunction(func[2].functionName, func[2].xMin, func[2].xMax, func[2].yMin, func[2].yMax, func[2].boxColor, xIndex, drawBottomY);
-  const functionPoints2 = exp2.generateFunctionPoints(columnWidth, canvas.width, canvas.height);
-  points.push(functionPoints2);
-  exp2.generatePassage(passages);
-  console.log(exp2.functionPoints.length);
-  console.log(exp2.functionPassage);
+  // drawBottomY = 360;
+  // exp2 = new mathematicalFunction(f[3].functionName, f[3].xMin, f[3].xMax, f[3].yMin, f[3].yMax, f[3].boxColor, xIndex, drawBottomY);
+  // exp2.generateFunctionPoints(columnWidth, canvas);
+  // points.push(functionPoints2);
+  // exp2.generatePassage();
+  // console.log(exp2.functionPoints.length);
+  // console.log(exp2.functionPassage);
 
-  xIndex = 1;
-  drawBottomY = 180;
-  arctan3 = new mathematicalFunction(func[10].functionName, func[10].xMin, func[10].xMax, func[10].yMin, func[10].yMax, func[10].boxColor, xIndex, drawBottomY);
-  const functionPoints3 = arctan3.generateFunctionPoints(columnWidth, canvas.width, canvas.height);
+  // xIndex = 1;
+  // drawBottomY = 180;
+  // arctan3 = new mathematicalFunction(f[10].functionName, f[10].xMin, f[10].xMax, f[10].yMin, f[10].yMax, f[10].boxColor, xIndex, drawBottomY);
+  // arctan3.generateFunctionPoints(columnWidth, canvas);
+  // arctan3.generatePassage();
   // console.log(functionPoints3.length);
-  points.push(functionPoints3);
+  // points.push(functionPoints3);
+
+  // mathematicalFunctions.push(exp1);
+  // mathematicalFunctions.push(exp2);
+  // mathematicalFunctions.push(arctan3);
+  console.log(mathematicalFunctions[0].functionPassage);
 
   function passageExponential(xIndex, drawBottomY) {
     // 曲線の座標配列
@@ -298,8 +483,17 @@ function drawAmida() {
   // }
 
   // ctx.beginPath();
-  exp1.drawFunction(columnWidth, ctx);
-  exp2.drawFunction(columnWidth, ctx);
+  for (let i = 0; i < numPassages; i++) {
+    mathematicalFunctions[i].drawFunction(ctx);
+    mathematicalFunctions[i].drawFunctionBox(columnWidth, canvas, ctx);
+  }
+  // exp1.drawFunction(ctx);
+  // exp2.drawFunction(ctx);
+  // arctan3.drawFunction(ctx);
+
+  // exp1.drawFunctionBox(columnWidth, canvas, ctx);
+  // exp2.drawFunctionBox(columnWidth, canvas, ctx);
+  // arctan3.drawFunctionBox(columnWidth, canvas, ctx);
   // ctx.stroke();
 
   ctx.fillStyle = 'red';
@@ -552,39 +746,46 @@ function animateAmida(col, callback) {
   let x2;
   let passage_Y;
   let idx = 0;
+  let horizontalPassageFunction;
   // console.log(callback);
 
   const interval = setInterval(() => {
     if (state === "down") {
       // 横線チェック
-      // const nearLadder = passages.find(l=>Math.abs(l.y - y) < 2 && (l.col===xIndex||l.col===xIndex-1));
-      const nearLadder = passages.find(l =>
+      // const nearPassage = passages.find(l=>Math.abs(l.y - y) < 2 && (l.col===xIndex||l.col===xIndex-1));
+      // const nearPassage = passages.find(l =>
+      const nearPassageFunction = mathematicalFunctions.find(mF =>
         // Math.abs(l.y - y) < 2 && (l.from === xIndex || l.to === xIndex));
         // Math.abs(l.y.from - y) < 2 && (l.x.from === xIndex || l.x.to === xIndex));
         // Math.abs(l.y.from - y) < 2 && l.x.from === xIndex );
-        (l.x.from === xIndex && Math.abs(l.y.from - y) < 2) || (l.x.to === xIndex && Math.abs(l.y.to - y) < 2)
+        // (l.x.from === xIndex && Math.abs(l.y.from - y) < 2) || (l.x.to === xIndex && Math.abs(l.y.to - y) < 2)
+        (mF.functionPassage.x.from === xIndex && Math.abs(mF.functionPassage.y.from - y) < 2) || (mF.functionPassage.x.to === xIndex && Math.abs(mF.functionPassage.y.to - y) < 2)
       );
-      // if (nearLadder) {
+      // console.log('nearPassageFunction:'+nearPassageFunction);
+      // console.log('nearPassageFunction.functionPassage:'+nearPassageFunction.functionPassage);
+      // if (nearPassage) {
       //   // 横移動
-      //   // if (nearLadder.col===xIndex) xIndex++;
-      //   // else if (nearLadder.col===xIndex-1) xIndex--;
+      //   // if (nearPassage.col===xIndex) xIndex++;
+      //   // else if (nearPassage.col===xIndex-1) xIndex--;
       // }
-      if (nearLadder) {
-        nearLadder.boxVisible = false;
+      // if (nearPassage) {
+      if (nearPassageFunction) {
+        nearPassageFunction.functionPassage.boxVisible = false;
         // 横移動に切り替え
-        if (nearLadder.x.from === xIndex) {
-          xIndex = nearLadder.x.to;
+        if (nearPassageFunction.functionPassage.x.from === xIndex) {
+          xIndex = nearPassageFunction.functionPassage.x.to;
           idx = 0;
           // targetX = columnWidth * (xIndex + 1);
-        } else if (nearLadder.x.to === xIndex) {
-          xIndex = nearLadder.x.from;
-          idx = points.length - 1;
+        } else if (nearPassageFunction.functionPassage.x.to === xIndex) {
+          xIndex = nearPassageFunction.functionPassage.x.from;
+          idx = nearPassageFunction.functionPoints.length - 1;
           // targetX = columnWidth * (xIndex + 1);
         }
         targetX = columnWidth * (xIndex + 1);
-        // x1 = columnWidth * (nearLadder.from + 1);
-        // x2 = columnWidth * (nearLadder.to + 1);
-        // passage_Y = nearLadder.y;
+        horizontalPassageFunction = nearPassageFunction;
+        // x1 = columnWidth * (nearPassage.from + 1);
+        // x2 = columnWidth * (nearPassage.to + 1);
+        // passage_Y = nearPassage.y;
         state = "horizontal";
       } else {
         y += step; // 縦移動
@@ -602,7 +803,7 @@ function animateAmida(col, callback) {
       // if (Math.abs(dx) < 1) {
       // console.log(Math.sign(dx));
       // console.log(idx);
-      if ((Math.sign(dx) > 0 && idx >= points.length) || (Math.sign(dx) <= 0 && idx <= -1)) {
+      if ((Math.sign(dx) > 0 && idx >= horizontalPassageFunction.functionPoints.length) || (Math.sign(dx) <= 0 && idx <= -1)) {
         // if ((Math.sign(dx) > 0 && idx >= points.length) || (Math.sign(dx) < 0 && idx <= 0)) {
         state = "down"; // 横移動終わり
         // console.log(idx);
@@ -631,7 +832,8 @@ function animateAmida(col, callback) {
         // console.log(x);
         // console.log('idx:'+idx);
         // idx += 1;
-        p = points[idx];
+        // p = points[idx];
+        p = horizontalPassageFunction.functionPoints[idx];
         x = p.x;
         y = p.y;
         idx += Math.sign(dx);
@@ -641,7 +843,7 @@ function animateAmida(col, callback) {
     drawAmida();
     ctx.fillStyle = 'red';
     ctx.beginPath();
-    ctx.arc(x, y, 8, 0, Math.PI * 2);
+    ctx.arc(x, y, 8, 0, 2 * Math.PI);
     ctx.fill();
 
     if (y > canvas.height - 20) {
