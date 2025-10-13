@@ -73,8 +73,8 @@ class mathematicalFunction {
       ctx.fillStyle = this.boxColor;
       const startX = columnWidth * (this.xIndex + 1);
       const drawHeight = canvas.height / canvas.width * columnWidth;
-      ctx.fillRect(startX, this.drawBottomY - drawHeight, columnWidth, drawHeight);
-      ctx.strokeRect(startX, this.drawBottomY - drawHeight, columnWidth, drawHeight);
+      ctx.fillRect(startX, this.drawBottomY - drawHeight - 15, columnWidth, drawHeight + 30);
+      ctx.strokeRect(startX, this.drawBottomY - drawHeight - 15, columnWidth, drawHeight + 30);
       this.drawFunctionType(ctx, columnWidth, startX, drawHeight);
       // ctx.stroke();
     }
@@ -155,7 +155,7 @@ class mathematicalFunction {
       ctx.font = "36px 'STIX Two Math', serif";
       ctx.fillText(`e`, drawFunctionStartX, drawFunctionStartY);
       ctx.font = "20px 'STIX Two Math', serif";
-      ctx.fillText(`-x`, 1.52*columnWidth+15,this.drawBottomY-0.45*drawHeight-15);
+      ctx.fillText(`-x`, drawFunctionStartX+15, drawFunctionStartY-15);
 
     } else if (this.functionName === 'log') {
 
@@ -211,15 +211,15 @@ class mathematicalFunction {
   }
 
   // 変換（座標→canvas ピクセル）
-  toCanvasX(draw_x, columnWidth) {
+  toCanvasX(drawX, columnWidth) {
     const startX = columnWidth * (this.xIndex + 1);
     // const width = x2 - x1;
-    return (draw_x - this.xMin) / (this.xMax - this.xMin) * columnWidth + startX;
+    return (drawX - this.xMin) / (this.xMax - this.xMin) * columnWidth + startX;
   }
 
-  toCanvasY(draw_y, columnWidth, canvas) {
+  toCanvasY(drawY, columnWidth, canvas) {
     const drawHeight = canvas.height / canvas.width * columnWidth;
-    return - (draw_y - this.yMin) / (this.yMax - this.yMin) * drawHeight + this.drawBottomY;
+    return - (drawY - this.yMin) / (this.yMax - this.yMin) * drawHeight + this.drawBottomY;
   }
 
 };
@@ -245,7 +245,7 @@ const xMax = 3;//5;//3;//3;//5;//1;//1;//Math.atan(8);//3;//1;//1;//2;//2*Math.P
 // const yMin = 0;
 const yMin = Math.log(xMin);//-1;//1;//-11;//-1;//0;//-Math.PI/2;//-8;//Math.log(xMin);//-1;//Math.exp(xMin);//Math.atan(xMin);//-1.0;//Math.exp(xMin);
 const yMax = Math.log(xMax);//1;//10;//11;//1;//Math.PI;//Math.PI/2;//8;//Math.log(xMax);//1;//Math.exp(xMax);//Math.atan(xMax);//1.0;//Math.exp(xMax); // e^x の最大値
-const mathematicalFunctions = [];
+let mathematicalFunctions = [];
 
 // 設定画面への遷移
 document.getElementById('toSettings').onclick = () => {
@@ -282,6 +282,8 @@ document.getElementById('startGame').onclick = () => {
 };
 
 document.getElementById('endButton').onclick = () => {
+  //終了ボタンを押した後でも boxVisible を true にできる！
+  mathematicalFunctions = [];
   showSection('title');
 };
 
@@ -304,10 +306,10 @@ function setupAmida() {
   let RandomFunctionNumbers;
 
   // テストデータの生成
-  numPassages = 1;//3;
-  RandomXIndex = [0];//[0,0,1];
-  RandomDrawBottomY = [180];//[180, 360, 180];
-  RandomFunctionNumbers = [13];//[2, 3, 6];
+  numPassages = 4;//3;
+  RandomXIndex = [0, 0, 0, 1];//[0,0,1];
+  RandomDrawBottomY = [160, 300, 440, 400];//[180, 360, 180];
+  RandomFunctionNumbers = [11, 2, 6, 2];//[2, 3, 6];
 
   for (let i = 0; i < numPassages; i++) {
     const mF = new mathematicalFunction(f[RandomFunctionNumbers[i]].functionName, f[RandomFunctionNumbers[i]].xMin, f[RandomFunctionNumbers[i]].xMax, f[RandomFunctionNumbers[i]].yMin, f[RandomFunctionNumbers[i]].yMax, f[RandomFunctionNumbers[i]].boxColor, RandomXIndex[i], RandomDrawBottomY[i]);
@@ -378,6 +380,7 @@ function setupAmida() {
   // mathematicalFunctions.push(exp2);
   // mathematicalFunctions.push(arctan3);
   console.log(mathematicalFunctions[0].functionPassage);
+  console.log(mathematicalFunctions.length);
 
   function passageExponential(xIndex, drawBottomY) {
     // 曲線の座標配列
