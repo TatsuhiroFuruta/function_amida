@@ -220,7 +220,8 @@ class mathematicalFunction {
 
   toCanvasY(drawY, columnWidth, canvas) {
     const drawHeight = canvas.height / canvas.width * columnWidth;
-    return - (drawY - this.yMin) / (this.yMax - this.yMin) * drawHeight + this.drawBottomY;
+    // return - (drawY - this.yMin) / (this.yMax - this.yMin) * drawHeight + this.drawBottomY;
+    return - (drawY - this.yMin) / (this.yMax - this.yMin) * drawHeight + this.curveBottomY;
   }
 
 };
@@ -310,10 +311,10 @@ function setupAmida() {
 
   // テストデータの生成
   numPassages = 2;//4;//3;
-  RandomXIndex = [0, 0];//[0, 0, 1, 1];//[0,0,1];
-  RandomDrawBottomY = [247, 454];//[225, 430, 225, 430];//[180, 360, 180];
-  RandomCurveBottomY = [237, 434];//[195, 360, 195, 360];
-  RandomFunctionNumbers = [6, 2];//[11, 2, 6, 2];//[2, 3, 6];
+  RandomXIndex = [0, 1];//[0, 0, 1, 1];//[0,0,1];
+  RandomDrawBottomY = [247, 247];//[225, 430, 225, 430];//[180, 360, 180];
+  RandomCurveBottomY = [222, 247];//[195, 360, 195, 360];
+  RandomFunctionNumbers = [4, 12];//[11, 2, 6, 2];//[2, 3, 6];
 
   for (let i = 0; i < numPassages; i++) {
     const mF = new mathematicalFunction(f[RandomFunctionNumbers[i]].functionName, f[RandomFunctionNumbers[i]].xMin, f[RandomFunctionNumbers[i]].xMax, f[RandomFunctionNumbers[i]].yMin, f[RandomFunctionNumbers[i]].yMax, f[RandomFunctionNumbers[i]].boxColor, RandomXIndex[i], RandomCurveBottomY[i] , RandomDrawBottomY[i]);
@@ -384,6 +385,7 @@ function setupAmida() {
   // mathematicalFunctions.push(exp2);
   // mathematicalFunctions.push(arctan3);
   console.log(mathematicalFunctions[0].functionPassage);
+  console.log(mathematicalFunctions[0].functionPoints.length);
   console.log(mathematicalFunctions.length);
 
   function passageExponential(xIndex, drawBottomY) {
