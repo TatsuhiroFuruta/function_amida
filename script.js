@@ -17,7 +17,7 @@ const f = [
 ];
 
 class mathematicalFunction {
-  constructor(functionName, xMin, xMax, yMin, yMax, boxColor, xIndex, drawBottomY) {
+  constructor(functionName, xMin, xMax, yMin, yMax, boxColor, xIndex, curveBottomY, drawBottomY) {
     this.functionName = functionName;
     this.xMin = xMin;
     this.xMax = xMax;
@@ -25,6 +25,7 @@ class mathematicalFunction {
     this.yMax = yMax;
     this.boxColor = boxColor;
     this.xIndex = xIndex;
+    this.curveBottomY = curveBottomY;
     this.drawBottomY = drawBottomY;
     this.functionPoints = [];
     this.functionPassage;
@@ -72,9 +73,9 @@ class mathematicalFunction {
       // ctx.beginPath();
       ctx.fillStyle = this.boxColor;
       const startX = columnWidth * (this.xIndex + 1);
-      const drawHeight = canvas.height / canvas.width * columnWidth;
-      ctx.fillRect(startX, this.drawBottomY - drawHeight - 15, columnWidth, drawHeight + 30);
-      ctx.strokeRect(startX, this.drawBottomY - drawHeight - 15, columnWidth, drawHeight + 30);
+      const drawHeight = canvas.height / canvas.width * columnWidth + 30;
+      ctx.fillRect(startX, this.drawBottomY - drawHeight, columnWidth, drawHeight );
+      ctx.strokeRect(startX, this.drawBottomY - drawHeight, columnWidth, drawHeight );
       this.drawFunctionType(ctx, columnWidth, startX, drawHeight);
       // ctx.stroke();
     }
@@ -300,19 +301,22 @@ function setupAmida() {
 
   // let xIndex = 0;
   // let drawBottomY = 180;
+  // let CurveBottomY = 210;
 
   let RandomXIndex;
+  let RandomCurveBottomY;
   let RandomDrawBottomY;
   let RandomFunctionNumbers;
 
   // テストデータの生成
-  numPassages = 4;//3;
-  RandomXIndex = [0, 0, 0, 1];//[0,0,1];
-  RandomDrawBottomY = [160, 300, 440, 400];//[180, 360, 180];
-  RandomFunctionNumbers = [11, 2, 6, 2];//[2, 3, 6];
+  numPassages = 2;//4;//3;
+  RandomXIndex = [0, 0];//[0, 0, 1, 1];//[0,0,1];
+  RandomDrawBottomY = [247, 454];//[225, 430, 225, 430];//[180, 360, 180];
+  RandomCurveBottomY = [237, 434];//[195, 360, 195, 360];
+  RandomFunctionNumbers = [6, 2];//[11, 2, 6, 2];//[2, 3, 6];
 
   for (let i = 0; i < numPassages; i++) {
-    const mF = new mathematicalFunction(f[RandomFunctionNumbers[i]].functionName, f[RandomFunctionNumbers[i]].xMin, f[RandomFunctionNumbers[i]].xMax, f[RandomFunctionNumbers[i]].yMin, f[RandomFunctionNumbers[i]].yMax, f[RandomFunctionNumbers[i]].boxColor, RandomXIndex[i], RandomDrawBottomY[i]);
+    const mF = new mathematicalFunction(f[RandomFunctionNumbers[i]].functionName, f[RandomFunctionNumbers[i]].xMin, f[RandomFunctionNumbers[i]].xMax, f[RandomFunctionNumbers[i]].yMin, f[RandomFunctionNumbers[i]].yMax, f[RandomFunctionNumbers[i]].boxColor, RandomXIndex[i], RandomCurveBottomY[i] , RandomDrawBottomY[i]);
     mF.generateFunctionPoints(columnWidth, canvas);
     mF.generatePassage();
     mathematicalFunctions.push(mF);
