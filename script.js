@@ -242,11 +242,11 @@ let ctx, canvas;
 let columnWidth;
 let topY = 20;
 let bottomY = 480;
-const xMin = 0.01;//-5;//-3;//-3;//-5;//-1;//-1;//Math.atan(-8);//0.01;//-1;//-1;//-2;//0;//-8.0;//0.0;//-2.0;
-const xMax = 3;//5;//3;//3;//5;//1;//1;//Math.atan(8);//3;//1;//1;//2;//2*Math.PI;//8.0;//2.0*Math.PI; //2.0;
+// const xMin = 0.01;//-5;//-3;//-3;//-5;//-1;//-1;//Math.atan(-8);//0.01;//-1;//-1;//-2;//0;//-8.0;//0.0;//-2.0;
+// const xMax = 3;//5;//3;//3;//5;//1;//1;//Math.atan(8);//3;//1;//1;//2;//2*Math.PI;//8.0;//2.0*Math.PI; //2.0;
 // const yMin = 0;
-const yMin = Math.log(xMin);//-1;//1;//-11;//-1;//0;//-Math.PI/2;//-8;//Math.log(xMin);//-1;//Math.exp(xMin);//Math.atan(xMin);//-1.0;//Math.exp(xMin);
-const yMax = Math.log(xMax);//1;//10;//11;//1;//Math.PI;//Math.PI/2;//8;//Math.log(xMax);//1;//Math.exp(xMax);//Math.atan(xMax);//1.0;//Math.exp(xMax); // e^x の最大値
+// const yMin = Math.log(xMin);//-1;//1;//-11;//-1;//0;//-Math.PI/2;//-8;//Math.log(xMin);//-1;//Math.exp(xMin);//Math.atan(xMin);//-1.0;//Math.exp(xMin);
+// const yMax = Math.log(xMax);//1;//10;//11;//1;//Math.PI;//Math.PI/2;//8;//Math.log(xMax);//1;//Math.exp(xMax);//Math.atan(xMax);//1.0;//Math.exp(xMax); // e^x の最大値
 let mathematicalFunctions = [];
 
 // 設定画面への遷移
@@ -294,6 +294,12 @@ function showSection(id) {
   document.getElementById(id).classList.add('active');
 }
 
+const horizontalBoxNumbers = [
+  [247, 454], [225, 430], [170, 310, 450], [164, 298, 432], [142, 249, 356, 463]
+];
+
+const shiftY = [5, 15, 25];
+
 function setupAmida() {
   canvas = document.getElementById('amidaCanvas');
   // canvas.style.writingMode = 'vertical-rl';
@@ -304,17 +310,81 @@ function setupAmida() {
   // let drawBottomY = 180;
   // let CurveBottomY = 210;
 
+  let horizontalBoxNumber = horizontalBoxNumbers[numPlayers-2];
+  numPassages = horizontalBoxNumber.length * (numPlayers - 1);
+  // console.log(numPassages);
+  let RandomFunctionNumbers = [];
   let RandomXIndex;
-  let RandomCurveBottomY;
-  let RandomDrawBottomY;
-  let RandomFunctionNumbers;
+  let RandomDrawBottomY = [];
+  let RandomCurveBottomY = [];
+
+  for (let i = 0; i < numPassages; i++) {
+    // 直線コース
+    // let RandomFunctionNumber = Math.floor(Math.random()*2);
+    // 高校数学コース
+    // 標準コース
+    // let RandomFunctionNumber = Math.floor(Math.random()*7);
+    // 大学数学コース
+    // お楽しみコース
+    let RandomFunctionNumber = Math.floor(Math.random()*14);
+    RandomFunctionNumbers.push(RandomFunctionNumber);
+    // RandomFunctionNumbers.push(10);
+  }
+  // console.log(RandomFunctionNumbers);
+
+  let XIndexArray = [];
+  for (let i = 0; i < numPlayers-1; i++) {
+    XIndexArray.push(i);
+  }
+  // console.log(XIndexArray);
+
+  let XIndexMat = [];
+  for (let i = 0; i < horizontalBoxNumber.length; i++) {
+    XIndexMat.push(XIndexArray);
+  }
+  RandomXIndex = XIndexMat.flat();
+  // console.log(RandomXIndex.length);
+
+  let eliminatedShiftY1;
+  let eliminatedShiftY2;
+  for (let i = 0; i < horizontalBoxNumber.length; i++) {
+    for (let j = 0; j < numPlayers-1; j++) {
+      //一つ前のアルゴリズム
+      // RandomDrawBottomY.push(horizontalBoxNumber[i]);
+      // let RandomYIndex = Math.floor(Math.random()*3);
+      // RandomCurveBottomY.push(horizontalBoxNumber[i]-shiftY[RandomYIndex]);
+      //改善後のアルゴリズム
+      if (j === 0){
+        // console.log(shiftY);
+        let initEliminatedYIndex = Math.floor(Math.random()*3);
+        eliminatedShiftY1 = shiftY.splice(initEliminatedYIndex, 1).pop();
+        // console.log(eliminatedShiftY1);
+        // console.log(typeof eliminatedShiftY1);
+      }
+      RandomDrawBottomY.push(horizontalBoxNumber[i]);
+      let RandomYIndex = Math.floor(Math.random()*2);
+      // console.log(RandomYIndex);
+      // console.log(j);
+      // console.log(shiftY);
+      // console.log(shiftY[RandomYIndex]);
+      RandomCurveBottomY.push(horizontalBoxNumber[i]-shiftY[RandomYIndex]);
+      eliminatedShiftY2 = shiftY.splice(RandomYIndex, 1).pop();
+      shiftY.push(eliminatedShiftY1);
+      eliminatedShiftY1 = eliminatedShiftY2;
+    }
+    shiftY.push(eliminatedShiftY1);
+    // console.log(shiftY);
+  }
+  // console.log(RandomXIndex);
+  // console.log(RandomDrawBottomY);
+  // console.log(RandomCurveBottomY);
 
   // テストデータの生成
-  numPassages = 2;//4;//3;
-  RandomXIndex = [0, 1];//[0, 0, 1, 1];//[0,0,1];
-  RandomDrawBottomY = [247, 247];//[225, 430, 225, 430];//[180, 360, 180];
-  RandomCurveBottomY = [222, 247];//[195, 360, 195, 360];
-  RandomFunctionNumbers = [4, 12];//[11, 2, 6, 2];//[2, 3, 6];
+  // numPassages = 2;//4;//3;
+  // RandomXIndex = [0, 1];//[0, 0, 1, 1];//[0,0,1];
+  // RandomDrawBottomY = [247, 247];//[225, 430, 225, 430];//[180, 360, 180];
+  // RandomCurveBottomY = [222, 247];//[195, 360, 195, 360];
+  // RandomFunctionNumbers = [4, 12];//[11, 2, 6, 2];//[2, 3, 6];
 
   for (let i = 0; i < numPassages; i++) {
     const mF = new mathematicalFunction(f[RandomFunctionNumbers[i]].functionName, f[RandomFunctionNumbers[i]].xMin, f[RandomFunctionNumbers[i]].xMax, f[RandomFunctionNumbers[i]].yMin, f[RandomFunctionNumbers[i]].yMax, f[RandomFunctionNumbers[i]].boxColor, RandomXIndex[i], RandomCurveBottomY[i] , RandomDrawBottomY[i]);
@@ -384,9 +454,9 @@ function setupAmida() {
   // mathematicalFunctions.push(exp1);
   // mathematicalFunctions.push(exp2);
   // mathematicalFunctions.push(arctan3);
-  console.log(mathematicalFunctions[0].functionPassage);
-  console.log(mathematicalFunctions[0].functionPoints.length);
-  console.log(mathematicalFunctions.length);
+  // console.log(mathematicalFunctions[0].functionPassage);
+  // console.log(mathematicalFunctions[0].functionPoints.length);
+  // console.log(mathematicalFunctions.length);
 
   function passageExponential(xIndex, drawBottomY) {
     // 曲線の座標配列
