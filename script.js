@@ -229,6 +229,7 @@ class mathematicalFunction {
 // exp = new mathematicalFunction(func[2].functionName, func[2].xMin, func[2].xMax, func[2].yMin, func[2].yMax, func[2].boxColor);
 // exp.generatePassage();
 
+let course;
 let playerNames = [];
 let numPlayers = 3;
 let numPassages = 5;
@@ -249,11 +250,30 @@ let bottomY = 480;
 // const yMax = Math.log(xMax);//1;//10;//11;//1;//Math.PI;//Math.PI/2;//8;//Math.log(xMax);//1;//Math.exp(xMax);//Math.atan(xMax);//1.0;//Math.exp(xMax); // e^x の最大値
 let mathematicalFunctions = [];
 
-// 設定画面への遷移
-document.getElementById('toSettings').onclick = () => {
-  showSection('settings');
+// コース選択画面への遷移
+document.getElementById('toCourseSelection').onclick = () => {
+  showSection('course');
   updateNameInputs();
 };
+
+// 設定画面への遷移
+// document.getElementById('toSettings').onclick = () => {
+// console.log(document.getElementsByClassName('toSettings')[0].textContent);
+const toSettings = document.getElementsByClassName('toSettings');
+for (let i = 0; i < toSettings.length; i++) {
+  toSettings[i].onclick = (e) => {
+    // console.log(e.target.textContent);
+    course = e.target.textContent;
+    // console.log(course);
+    showSection('settings');
+    updateNameInputs();
+  };
+}
+// document.getElementsByClassName('toSettings').onclick = (e) => {
+//   console.log(e.textContent);
+//   showSection('settings');
+//   updateNameInputs();
+// };
 document.getElementById('numPlayers').oninput = updateNameInputs;
 // 人数入力後
 function updateNameInputs() {
@@ -319,14 +339,20 @@ function setupAmida() {
   let RandomCurveBottomY = [];
 
   for (let i = 0; i < numPassages; i++) {
+    let RandomFunctionNumber;
     // 直線コース
-    // let RandomFunctionNumber = Math.floor(Math.random()*2);
-    // 高校数学コース
-    // 標準コース
-    // let RandomFunctionNumber = Math.floor(Math.random()*7);
-    // 大学数学コース
-    // お楽しみコース
-    let RandomFunctionNumber = Math.floor(Math.random()*14);
+    // ジグザグコース
+    if (course === 'ジグザグコース') {
+      RandomFunctionNumber = Math.floor(Math.random()*2);
+    } else if (course === '標準コース') {
+      // 高校数学コース
+      // 標準コース
+      RandomFunctionNumber = Math.floor(Math.random()*8);
+    } else {
+      // 大学数学コース
+      // お楽しみコース
+      RandomFunctionNumber = Math.floor(Math.random()*14);
+    }
     RandomFunctionNumbers.push(RandomFunctionNumber);
     // RandomFunctionNumbers.push(10);
   }
