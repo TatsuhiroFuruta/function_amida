@@ -277,7 +277,12 @@ for (let i = 0; i < toSettings.length; i++) {
 document.getElementById('numPlayers').oninput = updateNameInputs;
 // 人数入力後
 function updateNameInputs() {
-  numPlayers = parseInt(document.getElementById('numPlayers').value);
+  inputNumPlayers = parseInt(document.getElementById('numPlayers').value);
+  if (inputNumPlayers >= 2 && inputNumPlayers <= 6) {
+    numPlayers = inputNumPlayers;
+  } else {
+    numPlayers = 0;
+  }
   const div = document.getElementById('nameInputs');
   div.innerHTML = '';
   for (let i = 0; i < numPlayers; i++) {
@@ -286,14 +291,93 @@ function updateNameInputs() {
   }
 }
 
+// 入力検証
+function validateSettings() {
+  let valid = true;
+  const flash = document.getElementById('flash');
+
+  while (flash.firstChild) {
+      flash.removeChild(flash.firstChild);
+  }
+
+  const numPlayersValue = document.getElementById('numPlayers').value;
+  numPlayers = parseInt(numPlayersValue);
+
+  // 人数未入力
+  if (!numPlayersValue ||  !numPlayersValue.match(/\S/g)){
+    valid = false;
+    createValidationMessages (flash, 'validBlank', '人数を入力してください。');
+  } else {
+    removeValidationMessages(flash, 'validBlank');
+  }
+
+  // 人数チェック
+  if(numPlayers < 2 || numPlayers > 6){
+    valid = false;
+    createValidationMessages (flash, 'validNumPlayers', '人数は2〜6にしてください。');
+    // flash.textContent = '人数は2〜6人にしてください。';
+    // return false;
+  } else {
+    removeValidationMessages(flash, 'validNumPlayers');
+  }
+  // else if (numPlayers === NaN){
+    // valid = false;
+    // createValidationMessages (flash, '人数を入力してください。');
+  // }
+
+  // 名前チェック
+  for(let i=0;i<numPlayers;i++){
+    const name = document.getElementById('name'+i).value.trim();
+    // if(name === ''){
+    //   flash.textContent = `名前${i+1}が空欄です。全員入力してください。`;
+    //   return false;
+    // }
+    if(name.length > 6){
+      valid = false;
+      createValidationMessages (flash, `validName${i}`, `名前${i+1}が6文字を超えています。`);
+      // flash.textContent = `名前${i+1}が6文字を超えています。`;
+      // return false;
+    } else {
+      removeValidationMessages(flash, `validName${i}`);
+    }
+  }
+
+  if (!valid) {
+    return false;
+  } else {
+    // flash.textContent = '';
+    while (flash.firstChild) {
+      flash.removeChild(flash.firstChild);
+    }
+    return true;
+  }
+
+}
+
+function createValidationMessages(flash, id, message) {
+  const div = document.createElement('div');
+  div.id = id;
+  div.textContent = message;
+  flash.appendChild(div);
+}
+
+function removeValidationMessages(flash, id) {
+  const removeElement = document.getElementById(id);
+  if (removeElement){
+    // console.log(removeElement);
+    flash.removeChild(removeElement);
+  }
+}
+
 // 阿弥陀籤画面への遷移
 document.getElementById('startGame').onclick = () => {
+  if(!validateSettings()) return;
   document.getElementById('endButton').style.display = 'none';
   numPlayers = parseInt(document.getElementById('numPlayers').value);
-  numPassages = parseInt(document.getElementById('numPassages').value);
+  // numPassages = parseInt(document.getElementById('numPassages').value);
   playerNames = [];
   for (let i = 0; i < numPlayers; i++) {
-    playerNames.push(document.getElementById(`name${i}`).value || `プレイヤー${i + 1}`);
+    playerNames.push(document.getElementById(`name${i}`).value.trim() || `プレイヤー${i + 1}`);
   }
   currentIndex = 0;
   results = [];
