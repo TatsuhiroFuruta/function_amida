@@ -74,10 +74,16 @@
 
   <!-- 設定画面 -->
   <section id="settings">
+    <div id="flash"></div>
     <h2>設定</h2>
-    <label>人数: <input type="number" id="numPlayers" min="2" value="3"></label><br>
-    <label>通路の数: <input type="number" id="numPassages" min="1" value="5"></label><br>
+    <label>人数: <input type="number" id="numPlayers" min="2" max="6" value=""></label><br>
+    <!-- <label>通路の数: <input type="number" id="numPassages" min="1" value="5"></label><br> -->
     <div id="nameInputs"></div>
+    <ul>
+      <li>人数は2〜6人</li>
+      <li>名前は任意。最大6文字まで。未入力及び空欄のみの場合は、「プレイヤー’番号’」（例：名前1なら「プレイヤー1」）になります。</li>
+      <li>あみだの位置は上から設定した名前のプレイヤーから順番に決めていきます。</li>
+    </ul>
     <button id="startGame">開始する</button>
   </section>
 
