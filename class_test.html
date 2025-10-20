@@ -4,10 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>あみだくじ</title>
+  <title>関数あみだくじ</title>
   <style>
     body {
+      background: #f7f7f7;
       font-family: sans-serif;
+      color: #181818;
       text-align: center;
       margin: 0;
       padding: 0;
@@ -22,20 +24,35 @@
       display: block;
     }
 
-    input,
+    input {
+      font-size: 1rem;
+      margin: 5px;
+      padding: 8px 12px;
+      border-radius: 5px;
+      /* border: none; */
+    }
+
     button {
       font-size: 1rem;
       margin: 5px;
       padding: 8px 12px;
+      border-radius: 5px;
+      border: none;
     }
 
     canvas {
-      background: #f8f8f8;
-      border: 1px solid #ccc;
+      /* background: #f8f8f8; */
+      background: #f7f7f7;
+      /* border: 1px solid #ccc; */
       margin: 10px auto;
       display: block;
       max-width: 100%;
     }
+
+    /* #title {
+      margin: auto;
+      background: #006400;
+    } */
 
     #start-buttons button {
       font-size: 1.2rem;
@@ -43,12 +60,57 @@
       padding: 10px 14px;
     }
 
+    #flash {
+      background: #ffb6c1;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 5px auto;
+      width: 30%;
+      display: none;
+    }
+
+    /* #numPlayers {
+      width: 20%;
+    } */
+
     #endButton {
+      font: bold;
+      background: #dc143c;
       font-size: 1.2rem;
+      color: #f7f7f7;
       /* margin-top: 20px; */
       margin: 20px auto;
       padding: 10px 20px;
       display: none;
+    }
+
+    #endButton:hover {
+      background: #b22222;
+    }
+
+    .column-button {
+      font: bold;
+      color: #f7f7f7;
+      background: #228b22;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .column-button:hover {
+      background: #006400;
+    }
+
+    #toCourseSelection, #startGame, .start-button {
+      font: bold;
+      background: #00bfff;
+      color: #f7f7f7;
+      /* border-radius: 5px;
+      border: none; */
+      /* border-color: none; */
+    }
+
+    #toCourseSelection:hover, #startGame:hover, .start-button:hover {
+      background-color: #6495ed;
     }
   </style>
   <!-- <script type="module">import "./mathematical_function.js"</script> -->
@@ -60,13 +122,14 @@
 <body>
   <!-- 開始画面 -->
   <section id="title" class="active">
-    <h1>あみだくじ</h1>
+    <h1>関数あみだくじ</h1>
     <!-- <button id="toSettings">スタート</button> -->
     <button id="toCourseSelection">スタート</button>
   </section>
 
   <!-- コース選択 -->
   <section id="course">
+    <h2>コース選択</h2>
     <button class="toSettings">ジグザグコース</button>
     <button class="toSettings">標準コース</button>
     <button class="toSettings">お楽しみコース</button>

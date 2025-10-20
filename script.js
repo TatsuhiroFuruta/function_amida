@@ -1,7 +1,7 @@
 // import { func, mathematicalFunction } from "./mathematical_function.js";
 const f = [
   { functionName: 'x', xMin: -1, xMax: 1, yMin: -1, yMax: 1, boxColor: 'cyan' },
-  { functionName: '-x', xMin: -1, xMax: 1, yMin: -1, yMax: 1, boxColor: 'cyan' },
+  { functionName: '-x', xMin: -1, xMax: 1, yMin: -1, yMax: 1, boxColor: '#e0ffff' },
   { functionName: 'expPlus', xMin: -2, xMax: 2, yMin: Math.exp(-2), yMax: Math.exp(2), boxColor: 'cyan' },
   { functionName: 'expMinus', xMin: -2, xMax: 2, yMin: Math.exp(-2), yMax: Math.exp(2), boxColor: 'cyan' },
   { functionName: 'log', xMin: 0.01, xMax: 3, yMin: Math.log(0.01), yMax: Math.log(3), boxColor: 'cyan' },
@@ -343,12 +343,14 @@ function validateSettings() {
   }
 
   if (!valid) {
+    flash.style.display = 'block';
     return false;
   } else {
     // flash.textContent = '';
     while (flash.firstChild) {
       flash.removeChild(flash.firstChild);
     }
+    flash.style.display = 'none';
     return true;
   }
 
@@ -358,6 +360,7 @@ function createValidationMessages(flash, id, message) {
   const div = document.createElement('div');
   div.id = id;
   div.textContent = message;
+  div.style.margin = '5px';
   flash.appendChild(div);
 }
 
@@ -685,10 +688,10 @@ function drawAmida() {
   // arctan3.drawFunctionBox(columnWidth, canvas, ctx);
   // ctx.stroke();
 
-  ctx.fillStyle = 'red';
-  ctx.beginPath();
-  ctx.arc(0, 180, 8, 0, Math.PI * 2);
-  ctx.fill();
+  // ctx.fillStyle = 'red';
+  // ctx.beginPath();
+  // ctx.arc(0, 180, 8, 0, Math.PI * 2);
+  // ctx.fill();
 
   function drawExponentialFunction(passage) {
     // 軸のスケール設定
@@ -853,6 +856,8 @@ function setupStartButtons() {
     const btn = document.createElement('button');
     btn.textContent = `列${i + 1}`;
     btn.id = `column-${i}`;
+    btn.classList.add('column-button');
+    // btn.style.backgroundColor = '#006400';
     // btn.onclick = () => chooseColumn(i);
     btn.addEventListener('click', () => {
       chooseColumn(i);
@@ -912,6 +917,7 @@ function startSequentialAnimation(i) {
   document.getElementById('currentPlayerTitle').textContent = `${playerNames[i]}さんの番です！`;
   const btn = document.createElement('button');
   btn.textContent = `スタート`;
+  btn.classList.add('start-button');
   btn.addEventListener('click', (e) => {
     // goal は関数名ではなく、引数。下記の animateAmida 関数の引数の関数において、無名関数を引数としている。
     e.target.style.display = 'none';
