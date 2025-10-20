@@ -304,7 +304,7 @@ function validateSettings() {
   numPlayers = parseInt(numPlayersValue);
 
   // 人数未入力
-  if (!numPlayersValue ||  !numPlayersValue.match(/\S/g)){
+  if (!numPlayersValue || !numPlayersValue.match(/\S/g)){
     valid = false;
     createValidationMessages (flash, 'validBlank', '人数を入力してください。');
   } else {
