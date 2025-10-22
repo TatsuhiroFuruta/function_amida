@@ -844,7 +844,8 @@ async function renderKatexToCanvas(latexString, x, y, width, height) {
 function showCurrentPlayer() {
   if (currentIndex < playerNames.length) {
     document.getElementById('currentPlayerTitle').textContent =
-      `現在のプレイヤー: ${playerNames[currentIndex]} さん 列を選んでください`;
+      // `現在のプレイヤー: ${playerNames[currentIndex]} さん 列を選んでください`;
+      `${playerNames[currentIndex]} さん 列を選んでください`;
   }
 }
 

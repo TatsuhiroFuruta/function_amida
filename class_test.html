@@ -31,7 +31,8 @@
     }
 
     h1 {
-      margin: 100px 0;
+      padding: 100px 0;
+      /* background-color: #006400; */
     }
 
     input {
@@ -83,22 +84,31 @@
     }
 
     #courseSelections button {
-      font: bold;
+      /* font: bold; */
       /* font: 10px bold; */
       background: #00bfff;
       color: #f7f7f7;
-      width: 30%;
+      /* width: 30%; */
+      width: 150px;
       /* display: block; */
     }
+
+    #settingTitle {
+      margin-block-start: 10px;
+    }
+
+    /* #courseSelectionsTitle {
+      margin: 100px 0;
+    } */
 
     #startGame {
       margin-top: 15px;
     }
 
     #start-buttons button {
-      font-size: 1.2rem;
+      /* font-size: 1.2rem; */
       margin: 5px;
-      padding: 10px 14px;
+      /* padding: 10px 14px; */
     }
 
     #flash {
@@ -115,9 +125,9 @@
     } */
 
     #endButton {
-      font: bold;
+      /* font: bold; */
       background: #dc143c;
-      font-size: 1.2rem;
+      /* font-size: 1.2rem; */
       color: #f7f7f7;
       /* margin-top: 20px; */
       margin: 20px auto;
@@ -130,11 +140,11 @@
     }
 
     .column-button {
-      font: bold;
+      /* font: bold; */
       color: #f7f7f7;
       background: #228b22;
-      border-radius: 5px;
-      border: none;
+      /* border-radius: 5px; */
+      /* border: none; */
     }
 
     .column-button:hover {
@@ -142,7 +152,7 @@
     }
 
     #toCourseSelection, #startGame, .start-button {
-      font: bold;
+      /* font: bold; */
       background: #00bfff;
       color: #f7f7f7;
       /* border-radius: 5px;
@@ -153,6 +163,26 @@
     #toCourseSelection:hover, #courseSelections button:hover, #startGame:hover, .start-button:hover {
       background-color: #6495ed;
     }
+
+    /* スマホ用 */
+  @media screen and (max-width: 479px) {
+    /*ウィンドウ幅が最大479pxまでの場合に適用*/
+    /* #courseSelections button { */
+      /* font-size: 16px; */
+      /* padding: 8px 5px; */
+    /* } */
+
+    .column-button {
+      font-size: 14px;
+    }
+
+    #currentPlayerTitle {
+      font-size: 16px;
+    }
+    /* .allContents {
+      display: block;
+    } */
+  }
   </style>
   <!-- <script type="module">import "./mathematical_function.js"</script> -->
   <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
@@ -170,7 +200,7 @@
 
   <!-- コース選択 -->
   <section id="course">
-    <h2>コース選択</h2>
+    <h2 id="courseSelectionsTitle">コース選択</h2>
     <div id="courseSelections">
       <button class="toSettings">ジグザグコース</button>
       <button class="toSettings">標準コース</button>
@@ -181,13 +211,13 @@
   <!-- 設定画面 -->
   <section id="settings">
     <div id="flash"></div>
-    <h2>設定</h2>
+    <h2 id="settingTitle">設定</h2>
     <ol>
       <li>人数は2〜6人</li>
       <li>名前は任意。最大6文字まで。未入力及び空欄のみの場合は、「プレイヤー’番号’」（例：名前1なら「プレイヤー1」）になります。</li>
       <li>あみだの位置は上から設定した名前のプレイヤーから順番に決めていきます。</li>
     </ol>
-    <label>人数: <input type="number" id="numPlayers" min="2" max="6" value=""></label><br>
+    <label>人数: <input type="number" id="numPlayers" min="2" max="6" value="" size="2"></label><br>
     <!-- <label>通路の数: <input type="number" id="numPassages" min="1" value="5"></label><br> -->
     <div id="nameInputs"></div>
     <button id="startGame">開始する</button>
