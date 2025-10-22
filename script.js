@@ -1,19 +1,19 @@
 // import { func, mathematicalFunction } from "./mathematical_function.js";
 const f = [
-  { functionName: 'x', xMin: -1, xMax: 1, yMin: -1, yMax: 1, boxColor: 'cyan' },
+  { functionName: 'x', xMin: -1, xMax: 1, yMin: -1, yMax: 1, boxColor: '#ffb6c1' },
   { functionName: '-x', xMin: -1, xMax: 1, yMin: -1, yMax: 1, boxColor: '#e0ffff' },
-  { functionName: 'expPlus', xMin: -2, xMax: 2, yMin: Math.exp(-2), yMax: Math.exp(2), boxColor: 'cyan' },
-  { functionName: 'expMinus', xMin: -2, xMax: 2, yMin: Math.exp(-2), yMax: Math.exp(2), boxColor: 'cyan' },
-  { functionName: 'log', xMin: 0.01, xMax: 3, yMin: Math.log(0.01), yMax: Math.log(3), boxColor: 'cyan' },
-  { functionName: 'sin', xMin: 0, xMax: 2 * Math.PI, yMin: -1, yMax: 1, boxColor: 'cyan' },
-  { functionName: 'cos', xMin: 0, xMax: 2 * Math.PI, yMin: -1, yMax: 1, boxColor: 'cyan' },
-  { functionName: 'tan', xMin: Math.atan(-8), xMax: Math.atan(8), yMin: -8, yMax: 8, boxColor: 'cyan' },
-  { functionName: 'arcsin', xMin: -1, xMax: 1, yMin: -Math.PI / 2, yMax: Math.PI / 2, boxColor: 'cyan' },
-  { functionName: 'arccos', xMin: -1, xMax: 1, yMin: 0, yMax: Math.PI, boxColor: 'cyan' },
-  { functionName: 'arctan', xMin: -8, xMax: 8, yMin: Math.atan(-8), yMax: Math.atan(8), boxColor: 'cyan' },
-  { functionName: 'sinh', xMin: -3, xMax: 3, yMin: -11, yMax: 11, boxColor: 'cyan' },
-  { functionName: 'cosh', xMin: -3, xMax: 3, yMin: 1, yMax: 10, boxColor: 'cyan' },
-  { functionName: 'tanh', xMin: -5, xMax: 5, yMin: -1, yMax: 1, boxColor: 'cyan' }
+  { functionName: 'expPlus', xMin: -2, xMax: 2, yMin: Math.exp(-2), yMax: Math.exp(2), boxColor: '#ffa500' },
+  { functionName: 'expMinus', xMin: -2, xMax: 2, yMin: Math.exp(-2), yMax: Math.exp(2), boxColor: '#87cefa' },
+  { functionName: 'log', xMin: 0.01, xMax: 3, yMin: Math.log(0.01), yMax: Math.log(3), boxColor: '#dda0dd' },
+  { functionName: 'sin', xMin: 0, xMax: 2 * Math.PI, yMin: -1, yMax: 1, boxColor: '#ffa07a' },
+  { functionName: 'cos', xMin: 0, xMax: 2 * Math.PI, yMin: -1, yMax: 1, boxColor: '#daa520' },
+  { functionName: 'tan', xMin: Math.atan(-8), xMax: Math.atan(8), yMin: -8, yMax: 8, boxColor: '#b0c4de' },
+  { functionName: 'arcsin', xMin: -1, xMax: 1, yMin: -Math.PI / 2, yMax: Math.PI / 2, boxColor: '#e9967a' },
+  { functionName: 'arccos', xMin: -1, xMax: 1, yMin: 0, yMax: Math.PI, boxColor: '#fff8dc' },
+  { functionName: 'arctan', xMin: -8, xMax: 8, yMin: Math.atan(-8), yMax: Math.atan(8), boxColor: '#48d1cc' },
+  { functionName: 'sinh', xMin: -3, xMax: 3, yMin: -11, yMax: 11, boxColor: '#ffe4e1' },
+  { functionName: 'cosh', xMin: -3, xMax: 3, yMin: 1, yMax: 10, boxColor: '#fdf5e6' },
+  { functionName: 'tanh', xMin: -5, xMax: 5, yMin: -1, yMax: 1, boxColor: '#e6e6fa' }
 ];
 
 class mathematicalFunction {
