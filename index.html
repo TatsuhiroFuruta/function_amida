@@ -1,107 +1,63 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
-  <title>あみだくじ</title>
-  <style>
-    body { text-align: center; font-family: sans-serif; }
-    canvas { border: 1px solid #333; margin-top: 10px; }
-    .buttons { margin: 10px; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>関数あみだ</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- <script type="module">import "./mathematical_function.js"</script> -->
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script> -->
 </head>
+
 <body>
-  <h1>あみだくじ</h1>
-  <div class="buttons">
-    <button onclick="startGame(0)">スタート 1</button>
-    <button onclick="startGame(1)">スタート 2</button>
-    <button onclick="startGame(2)">スタート 3</button>
-  </div>
-  <canvas id="amida" width="400" height="400"></canvas>
-  <p id="result"></p>
+  <!-- 開始画面 -->
+  <section id="title" class="active">
+    <h1>関数あみだ</h1>
+    <!-- <button id="toSettings">スタート</button> -->
+    <button id="toCourseSelection">スタート</button>
+  </section>
 
-  <script>
-    const canvas = document.getElementById("amida");
-    const ctx = canvas.getContext("2d");
-    const lineCount = 3; // 縦線の数
-    const topY = 20;
-    const bottomY = 380;
-    const spacing = canvas.width / (lineCount + 1);
+  <!-- コース選択 -->
+  <section id="course">
+    <h2 id="courseSelectionsTitle">コース選択</h2>
+    <div id="courseSelections">
+      <button class="toSettings">ジグザグコース</button>
+      <button class="toSettings">標準コース</button>
+      <button class="toSettings">お楽しみコース</button>
+    </div>
+  </section>
 
-    // 横線をランダム生成
-    const horizontalLines = [];
-    for (let y = 60; y < bottomY - 20; y += 40) {
-      if (Math.random() < 0.5) {
-        const xIndex = Math.floor(Math.random() * (lineCount - 1));
-        console.log(xIndex);
-        horizontalLines.push({ y, from: xIndex, to: xIndex + 1 });
-      }
-    }
+  <!-- 設定画面 -->
+  <section id="settings">
+    <div id="flash"></div>
+    <h2 id="settingTitle">設定</h2>
+    <ol>
+      <li>人数は2〜6人</li>
+      <li>名前は任意。最大6文字まで。未入力及び空欄のみの場合は、「プレイヤー’番号’」（例：名前1なら「プレイヤー1」）になります。</li>
+      <li>あみだの位置は上から設定した名前のプレイヤーから順番に決めていきます。</li>
+    </ol>
+    <label>人数: <input type="number" id="numPlayers" min="2" max="6" value="" size="2"></label><br>
+    <!-- <label>通路の数: <input type="number" id="numPassages" min="1" value="5"></label><br> -->
+    <div id="nameInputs"></div>
+    <button id="startGame">開始する</button>
+  </section>
 
-    // あみだくじ描画
-    function drawAmida() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = "black";
-      ctx.lineWidth = 2;
-
-      // 縦線
-      for (let i = 0; i < lineCount; i++) {
-        const x = spacing * (i + 1);
-        ctx.beginPath();
-        ctx.moveTo(x, topY);
-        ctx.lineTo(x, bottomY);
-        ctx.stroke();
-      }
-
-      // 横線
-      horizontalLines.forEach(line => {
-        const x1 = spacing * (line.from + 1);
-        const x2 = spacing * (line.to + 1);
-        ctx.beginPath();
-        ctx.moveTo(x1, line.y);
-        ctx.lineTo(x2, line.y);
-        ctx.stroke();
-      });
-    }
-
-    // ゴール結果（例）
-    const results = ["A賞", "B賞", "C賞"];
-
-    // スタートしてゴールまでたどる
-    function startGame(startIndex) {
-      let xIndex = startIndex;
-      let y = topY;
-
-      function step() {
-        if (y >= bottomY) {
-          document.getElementById("result").textContent =
-            `スタート${startIndex + 1} → ゴール: ${results[xIndex]}`;
-          return;
-        }
-
-        // 横線があるか確認
-        const line = horizontalLines.find(l => l.y === y && (l.from === xIndex || l.to === xIndex));
-        if (line) {
-          if (line.from === xIndex) {
-            xIndex = line.to;
-          } else {
-            xIndex = line.from;
-          }
-        }
-
-        // 描画
-        drawAmida();
-        ctx.fillStyle = "red";
-        ctx.beginPath();
-        ctx.arc(spacing * (xIndex + 1), y, 5, 0, Math.PI * 2);
-        ctx.fill();
-
-        y += 5;
-        requestAnimationFrame(step);
-      }
-      step();
-    }
-
-    drawAmida();
-  </script>
+  <!-- 阿弥陀籤画面 -->
+  <section id="amida">
+    <h2 id="currentPlayerTitle"></h2>
+    <canvas id="amidaCanvas" width="700" height="500"></canvas>
+    <div id="start-buttons"></div>
+    <!-- <button id="endButton" style="display:none;">終了する</button> -->
+    <!-- onclick="window.location.reload(true); を加えてもboxVisible は false のままだった。 -->
+    <!-- <button id="endButton" onclick="window.location.reload(true);">終了する</button> -->
+    <button id="endButton">終了する</button>
+  </section>
 </body>
+<script src="script.js"></script>
+<script src="page_beforeunload.js"></script>
+<!-- <script type="module" src="./mathematical_function.js"></script> -->
+
 </html>

@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="ja">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>関数あみだ</title>
-  <style>
-    body {
+body {
       background: #f7f7f7;
       font-family: sans-serif;
       color: #181818;
@@ -209,59 +201,3 @@
       display: block;
     } */
   }
-  </style>
-  <!-- <script type="module">import "./mathematical_function.js"</script> -->
-  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script> -->
-</head>
-
-<body>
-  <!-- 開始画面 -->
-  <section id="title" class="active">
-    <h1>関数あみだ</h1>
-    <!-- <button id="toSettings">スタート</button> -->
-    <button id="toCourseSelection">スタート</button>
-  </section>
-
-  <!-- コース選択 -->
-  <section id="course">
-    <h2 id="courseSelectionsTitle">コース選択</h2>
-    <div id="courseSelections">
-      <button class="toSettings">ジグザグコース</button>
-      <button class="toSettings">標準コース</button>
-      <button class="toSettings">お楽しみコース</button>
-    </div>
-  </section>
-
-  <!-- 設定画面 -->
-  <section id="settings">
-    <div id="flash"></div>
-    <h2 id="settingTitle">設定</h2>
-    <ol>
-      <li>人数は2〜6人</li>
-      <li>名前は任意。最大6文字まで。未入力及び空欄のみの場合は、「プレイヤー’番号’」（例：名前1なら「プレイヤー1」）になります。</li>
-      <li>あみだの位置は上から設定した名前のプレイヤーから順番に決めていきます。</li>
-    </ol>
-    <label>人数: <input type="number" id="numPlayers" min="2" max="6" value="" size="2"></label><br>
-    <!-- <label>通路の数: <input type="number" id="numPassages" min="1" value="5"></label><br> -->
-    <div id="nameInputs"></div>
-    <button id="startGame">開始する</button>
-  </section>
-
-  <!-- 阿弥陀籤画面 -->
-  <section id="amida">
-    <h2 id="currentPlayerTitle"></h2>
-    <canvas id="amidaCanvas" width="700" height="500"></canvas>
-    <div id="start-buttons"></div>
-    <!-- <button id="endButton" style="display:none;">終了する</button> -->
-    <!-- onclick="window.location.reload(true); を加えてもboxVisible は false のままだった。 -->
-    <!-- <button id="endButton" onclick="window.location.reload(true);">終了する</button> -->
-    <button id="endButton">終了する</button>
-  </section>
-</body>
-<script src="script.js"></script>
-<script src="page_beforeunload.js"></script>
-<!-- <script type="module" src="./mathematical_function.js"></script> -->
-
-</html>

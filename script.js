@@ -1,19 +1,19 @@
 // import { func, mathematicalFunction } from "./mathematical_function.js";
 const f = [
-  { functionName: 'x', xMin: -1, xMax: 1, yMin: -1, yMax: 1, boxColor: 'cyan' },
-  { functionName: '-x', xMin: -1, xMax: 1, yMin: -1, yMax: 1, boxColor: 'cyan' },
-  { functionName: 'expPlus', xMin: -2, xMax: 2, yMin: Math.exp(-2), yMax: Math.exp(2), boxColor: 'cyan' },
-  { functionName: 'expMinus', xMin: -2, xMax: 2, yMin: Math.exp(-2), yMax: Math.exp(2), boxColor: 'cyan' },
-  { functionName: 'log', xMin: 0.01, xMax: 3, yMin: Math.log(0.01), yMax: Math.log(3), boxColor: 'cyan' },
-  { functionName: 'sin', xMin: 0, xMax: 2 * Math.PI, yMin: -1, yMax: 1, boxColor: 'cyan' },
-  { functionName: 'cos', xMin: 0, xMax: 2 * Math.PI, yMin: -1, yMax: 1, boxColor: 'cyan' },
-  { functionName: 'tan', xMin: Math.atan(-8), xMax: Math.atan(8), yMin: -8, yMax: 8, boxColor: 'cyan' },
-  { functionName: 'arcsin', xMin: -1, xMax: 1, yMin: -Math.PI / 2, yMax: Math.PI / 2, boxColor: 'cyan' },
-  { functionName: 'arccos', xMin: -1, xMax: 1, yMin: 0, yMax: Math.PI, boxColor: 'cyan' },
-  { functionName: 'arctan', xMin: -8, xMax: 8, yMin: Math.atan(-8), yMax: Math.atan(8), boxColor: 'cyan' },
-  { functionName: 'sinh', xMin: -3, xMax: 3, yMin: -11, yMax: 11, boxColor: 'cyan' },
-  { functionName: 'cosh', xMin: -3, xMax: 3, yMin: 1, yMax: 10, boxColor: 'cyan' },
-  { functionName: 'tanh', xMin: -5, xMax: 5, yMin: -1, yMax: 1, boxColor: 'cyan' }
+  { functionName: 'x', xMin: -1, xMax: 1, yMin: -1, yMax: 1, boxColor: '#ffb6c1' },
+  { functionName: '-x', xMin: -1, xMax: 1, yMin: -1, yMax: 1, boxColor: '#e0ffff' },
+  { functionName: 'expPlus', xMin: -2, xMax: 2, yMin: Math.exp(-2), yMax: Math.exp(2), boxColor: '#ffa500' },
+  { functionName: 'expMinus', xMin: -2, xMax: 2, yMin: Math.exp(-2), yMax: Math.exp(2), boxColor: '#87cefa' },
+  { functionName: 'log', xMin: 0.01, xMax: 3, yMin: Math.log(0.01), yMax: Math.log(3), boxColor: '#dda0dd' },
+  { functionName: 'sin', xMin: 0, xMax: 2 * Math.PI, yMin: -1, yMax: 1, boxColor: '#ffa07a' },
+  { functionName: 'cos', xMin: 0, xMax: 2 * Math.PI, yMin: -1, yMax: 1, boxColor: '#daa520' },
+  { functionName: 'tan', xMin: Math.atan(-8), xMax: Math.atan(8), yMin: -8, yMax: 8, boxColor: '#b0c4de' },
+  { functionName: 'arcsin', xMin: -1, xMax: 1, yMin: -Math.PI / 2, yMax: Math.PI / 2, boxColor: '#e9967a' },
+  { functionName: 'arccos', xMin: -1, xMax: 1, yMin: 0, yMax: Math.PI, boxColor: '#fff8dc' },
+  { functionName: 'arctan', xMin: -8, xMax: 8, yMin: Math.atan(-8), yMax: Math.atan(8), boxColor: '#48d1cc' },
+  { functionName: 'sinh', xMin: -3, xMax: 3, yMin: -11, yMax: 11, boxColor: '#ffe4e1' },
+  { functionName: 'cosh', xMin: -3, xMax: 3, yMin: 1, yMax: 10, boxColor: '#fdf5e6' },
+  { functionName: 'tanh', xMin: -5, xMax: 5, yMin: -1, yMax: 1, boxColor: '#e6e6fa' }
 ];
 
 class mathematicalFunction {
@@ -304,7 +304,7 @@ function validateSettings() {
   numPlayers = parseInt(numPlayersValue);
 
   // 人数未入力
-  if (!numPlayersValue ||  !numPlayersValue.match(/\S/g)){
+  if (!numPlayersValue || !numPlayersValue.match(/\S/g)){
     valid = false;
     createValidationMessages (flash, 'validBlank', '人数を入力してください。');
   } else {
@@ -343,12 +343,14 @@ function validateSettings() {
   }
 
   if (!valid) {
+    flash.style.display = 'block';
     return false;
   } else {
     // flash.textContent = '';
     while (flash.firstChild) {
       flash.removeChild(flash.firstChild);
     }
+    flash.style.display = 'none';
     return true;
   }
 
@@ -358,6 +360,7 @@ function createValidationMessages(flash, id, message) {
   const div = document.createElement('div');
   div.id = id;
   div.textContent = message;
+  div.style.margin = '5px';
   flash.appendChild(div);
 }
 
@@ -685,10 +688,10 @@ function drawAmida() {
   // arctan3.drawFunctionBox(columnWidth, canvas, ctx);
   // ctx.stroke();
 
-  ctx.fillStyle = 'red';
-  ctx.beginPath();
-  ctx.arc(0, 180, 8, 0, Math.PI * 2);
-  ctx.fill();
+  // ctx.fillStyle = 'red';
+  // ctx.beginPath();
+  // ctx.arc(0, 180, 8, 0, Math.PI * 2);
+  // ctx.fill();
 
   function drawExponentialFunction(passage) {
     // 軸のスケール設定
@@ -841,7 +844,8 @@ async function renderKatexToCanvas(latexString, x, y, width, height) {
 function showCurrentPlayer() {
   if (currentIndex < playerNames.length) {
     document.getElementById('currentPlayerTitle').textContent =
-      `現在のプレイヤー: ${playerNames[currentIndex]} さん 列を選んでください`;
+      // `現在のプレイヤー: ${playerNames[currentIndex]} さん 列を選んでください`;
+      `${playerNames[currentIndex]} さん 列を選んでください`;
   }
 }
 
@@ -853,6 +857,8 @@ function setupStartButtons() {
     const btn = document.createElement('button');
     btn.textContent = `列${i + 1}`;
     btn.id = `column-${i}`;
+    btn.classList.add('column-button');
+    // btn.style.backgroundColor = '#006400';
     // btn.onclick = () => chooseColumn(i);
     btn.addEventListener('click', () => {
       chooseColumn(i);
@@ -912,6 +918,7 @@ function startSequentialAnimation(i) {
   document.getElementById('currentPlayerTitle').textContent = `${playerNames[i]}さんの番です！`;
   const btn = document.createElement('button');
   btn.textContent = `スタート`;
+  btn.classList.add('start-button');
   btn.addEventListener('click', (e) => {
     // goal は関数名ではなく、引数。下記の animateAmida 関数の引数の関数において、無名関数を引数としている。
     e.target.style.display = 'none';
