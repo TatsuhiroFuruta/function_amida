@@ -1,203 +1,150 @@
 body {
-      background: #f7f7f7;
-      font-family: sans-serif;
-      color: #181818;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-      /* position: relative; */
-    }
+  background: #f7f7f7;
+  font-family: sans-serif;
+  color: #181818;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
 
-    section {
-      /* position: absolute; */
-      /* top: 50%; */
-      /* left: 50%; */
-      /* margin: -25px 0 0 -25px; */
-      margin: 0 auto;
-      display: none;
-      padding: 20px;
-    }
+section {
+  margin: 0 auto;
+  display: none;
+  padding: 20px;
+}
 
-    section.active {
-      display: block;
-    }
+section.active {
+  display: block;
+}
 
-    h1 {
-      padding: 100px 0;
-      /* background-color: #006400; */
-      background-image: url("image/title_img.svg");
-      /* background-size: contain; */
-      background-size: 100% 100%;
-      background-repeat: no-repeat;
-      background-position: center center;
-      /* background-attachment: fixed; */
+h1 {
+  padding: 100px 0;
+  background-image: url("image/title_img.svg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
 
-    }
+input {
+  font-size: 1rem;
+  margin: 5px;
+  padding: 8px 12px;
+  border-radius: 5px;
+}
 
-    input {
-      font-size: 1rem;
-      margin: 5px;
-      padding: 8px 12px;
-      border-radius: 5px;
-      /* border: none; */
-    }
+button {
+  font-size: 1rem;
+  margin: 5px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: none;
+}
 
-    button {
-      font-size: 1rem;
-      margin: 5px;
-      padding: 8px 12px;
-      border-radius: 5px;
-      border: none;
-    }
+ol {
+  margin: 0 auto;
+  width: 40%;
+}
 
-    ol {
-      margin: 0 auto;
-      width: 40%;
-    }
+li {
+  font-size: 14px;
+  margin: 5px 0;
+  text-align: left;
+}
 
-    li {
-      font-size: 14px;
-      margin: 5px 0;
-      /* list-style: none; */
-      text-align: left;
-    }
+canvas {
+  background: #f7f7f7;
+  margin: 10px auto;
+  display: block;
+  max-width: 100%;
+}
 
-    canvas {
-      /* background: #f8f8f8; */
-      background: #f7f7f7;
-      /* border: 1px solid #ccc; */
-      margin: 10px auto;
-      display: block;
-      max-width: 100%;
-    }
+#courseSelections {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    /* #title {
-      margin: auto;
-      background: #006400;
-    } */
+#courseSelections button {
+  background: #00bfff;
+  color: #f7f7f7;
+  width: 150px;
+}
 
-    #courseSelections {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+#settingTitle {
+  margin-block-start: 10px;
+}
 
-    #courseSelections button {
-      /* font: bold; */
-      /* font: 10px bold; */
-      background: #00bfff;
-      color: #f7f7f7;
-      /* width: 30%; */
-      width: 150px;
-      /* display: block; */
-    }
+#courseSelectionsTitle {
+  margin-top: 150px;
+}
 
-    #settingTitle {
-      margin-block-start: 10px;
-    }
+#startGame {
+  margin-top: 15px;
+}
 
-    #courseSelectionsTitle {
-      margin-top: 150px;
-    }
+#start-buttons button {
+  margin: 5px;
+}
 
-    #startGame {
-      margin-top: 15px;
-    }
+#flash {
+  background: #ffb6c1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px auto;
+  width: 30%;
+  display: none;
+}
 
-    #start-buttons button {
-      /* font-size: 1.2rem; */
-      margin: 5px;
-      /* padding: 10px 14px; */
-    }
+#endButton {
+  background: #dc143c;
+  color: #f7f7f7;
+  margin: 20px auto;
+  display: none;
+}
 
-    #flash {
-      background: #ffb6c1;
-      border-radius: 5px;
-      padding: 10px;
-      margin: 5px auto;
-      width: 30%;
-      display: none;
-    }
+#endButton:hover {
+  background: #b22222;
+}
 
-    /* #numPlayers {
-      width: 20%;
-    } */
+.column-button {
+  color: #f7f7f7;
+  background: #228b22;
+}
 
-    #endButton {
-      /* font: bold; */
-      background: #dc143c;
-      /* font-size: 1.2rem; */
-      color: #f7f7f7;
-      /* margin-top: 20px; */
-      margin: 20px auto;
-      /* padding: 10px 20px; */
-      display: none;
-    }
+.column-button:hover {
+  background: #006400;
+}
 
-    #endButton:hover {
-      background: #b22222;
-    }
+#toCourseSelection, #startGame, .start-button {
+  background: #00bfff;
+  color: #f7f7f7;
+}
 
-    .column-button {
-      /* font: bold; */
-      color: #f7f7f7;
-      background: #228b22;
-      /* border-radius: 5px; */
-      /* border: none; */
-    }
+#toCourseSelection:hover, #courseSelections button:hover, #startGame:hover, .start-button:hover {
+  background-color: #6495ed;
+}
 
-    .column-button:hover {
-      background: #006400;
-    }
+/* スマホ用 */
+@media screen and (max-width: 479px) {
 
-    #toCourseSelection, #startGame, .start-button {
-      /* font: bold; */
-      background: #00bfff;
-      color: #f7f7f7;
-      /* border-radius: 5px;
-      border: none; */
-      /* border-color: none; */
-    }
-
-    #toCourseSelection:hover, #courseSelections button:hover, #startGame:hover, .start-button:hover {
-      background-color: #6495ed;
-    }
-
-    /* スマホ用 */
-  @media screen and (max-width: 479px) {
-    /* タブレット用 */
-  /* @media screen and (max-width: 768px) { */
-    /*ウィンドウ幅が最大479pxまでの場合に適用*/
-    /* #courseSelections button { */
-      /* font-size: 16px; */
-      /* padding: 8px 5px; */
-    /* } */
-
-    /* body {
-      height: 50vh;
-    } */
-
-    h1 {
-      margin-bottom: 100px;
-    }
-
-    #toCourseSelection {
-      margin-top: 100px;
-    }
-
-    li {
-      font-size: 11px;
-    }
-
-    .column-button {
-      font-size: 12px;
-    }
-
-    #currentPlayerTitle {
-      font-size: 16px;
-      margin-top: 100px;
-    }
-    /* .allContents {
-      display: block;
-    } */
+  h1 {
+    margin-bottom: 100px;
   }
+
+  #toCourseSelection {
+    margin-top: 100px;
+  }
+
+  li {
+    font-size: 11px;
+  }
+
+  .column-button {
+    font-size: 12px;
+  }
+
+  #currentPlayerTitle {
+    font-size: 16px;
+    margin-top: 100px;
+  }
+}
