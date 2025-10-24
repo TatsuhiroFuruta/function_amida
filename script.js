@@ -206,8 +206,8 @@ class mathematicalFunction {
 
 let course;
 let playerNames = [];
-let numPlayers = 3;
-let numPassages = 5;
+let numPlayers;
+let numPassages;
 let currentIndex = 0;
 let results = [];
 let choices = []; //各プレイヤーの選んだ列
@@ -503,7 +503,7 @@ function startSequentialAnimation(i) {
     document.getElementById('endButton').style.display = 'block';
     return;
   }
-  document.getElementById('currentPlayerTitle').textContent = `${playerNames[i]}さんの番です！`;
+  document.getElementById('currentPlayerTitle').textContent = `${playerNames[i]} さんの番です！`;
   const btn = document.createElement('button');
   btn.textContent = `スタート`;
   btn.classList.add('start-button');
