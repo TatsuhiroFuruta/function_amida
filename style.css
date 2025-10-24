@@ -5,14 +5,9 @@ body {
       text-align: center;
       margin: 0;
       padding: 0;
-      /* position: relative; */
     }
 
     section {
-      /* position: absolute; */
-      /* top: 50%; */
-      /* left: 50%; */
-      /* margin: -25px 0 0 -25px; */
       margin: 0 auto;
       display: none;
       padding: 20px;
@@ -24,14 +19,10 @@ body {
 
     h1 {
       padding: 100px 0;
-      /* background-color: #006400; */
       background-image: url("image/title_img.svg");
-      /* background-size: contain; */
       background-size: 100% 100%;
       background-repeat: no-repeat;
       background-position: center center;
-      /* background-attachment: fixed; */
-
     }
 
     input {
@@ -39,7 +30,6 @@ body {
       margin: 5px;
       padding: 8px 12px;
       border-radius: 5px;
-      /* border: none; */
     }
 
     button {
@@ -58,23 +48,15 @@ body {
     li {
       font-size: 14px;
       margin: 5px 0;
-      /* list-style: none; */
       text-align: left;
     }
 
     canvas {
-      /* background: #f8f8f8; */
       background: #f7f7f7;
-      /* border: 1px solid #ccc; */
       margin: 10px auto;
       display: block;
       max-width: 100%;
     }
-
-    /* #title {
-      margin: auto;
-      background: #006400;
-    } */
 
     #courseSelections {
       display: flex;
@@ -83,13 +65,9 @@ body {
     }
 
     #courseSelections button {
-      /* font: bold; */
-      /* font: 10px bold; */
       background: #00bfff;
       color: #f7f7f7;
-      /* width: 30%; */
       width: 150px;
-      /* display: block; */
     }
 
     #settingTitle {
@@ -105,9 +83,7 @@ body {
     }
 
     #start-buttons button {
-      /* font-size: 1.2rem; */
       margin: 5px;
-      /* padding: 10px 14px; */
     }
 
     #flash {
@@ -119,18 +95,10 @@ body {
       display: none;
     }
 
-    /* #numPlayers {
-      width: 20%;
-    } */
-
     #endButton {
-      /* font: bold; */
       background: #dc143c;
-      /* font-size: 1.2rem; */
       color: #f7f7f7;
-      /* margin-top: 20px; */
       margin: 20px auto;
-      /* padding: 10px 20px; */
       display: none;
     }
 
@@ -139,11 +107,8 @@ body {
     }
 
     .column-button {
-      /* font: bold; */
       color: #f7f7f7;
       background: #228b22;
-      /* border-radius: 5px; */
-      /* border: none; */
     }
 
     .column-button:hover {
@@ -151,12 +116,8 @@ body {
     }
 
     #toCourseSelection, #startGame, .start-button {
-      /* font: bold; */
       background: #00bfff;
       color: #f7f7f7;
-      /* border-radius: 5px;
-      border: none; */
-      /* border-color: none; */
     }
 
     #toCourseSelection:hover, #courseSelections button:hover, #startGame:hover, .start-button:hover {
@@ -165,17 +126,6 @@ body {
 
     /* スマホ用 */
   @media screen and (max-width: 479px) {
-    /* タブレット用 */
-  /* @media screen and (max-width: 768px) { */
-    /*ウィンドウ幅が最大479pxまでの場合に適用*/
-    /* #courseSelections button { */
-      /* font-size: 16px; */
-      /* padding: 8px 5px; */
-    /* } */
-
-    /* body {
-      height: 50vh;
-    } */
 
     h1 {
       margin-bottom: 100px;
@@ -197,7 +147,4 @@ body {
       font-size: 16px;
       margin-top: 100px;
     }
-    /* .allContents {
-      display: block;
-    } */
   }
