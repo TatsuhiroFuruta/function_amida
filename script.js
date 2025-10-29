@@ -31,7 +31,17 @@ class mathematicalFunction {
   }
 
   generateFunctionPoints(columnWidth, canvas) {
-    for (let x = this.xMin; x <= this.xMax; x += 0.01) {
+    let xGrid;
+    if (['arctan'].includes(this.functionName)) {
+      xGrid = 0.08;
+    } else if (['tanh'].includes(this.functionName)) {
+      xGrid = 0.05;
+    } else if (['sin', 'cos', 'sinh', 'cosh'].includes(this.functionName)) {
+      xGrid = 0.02;
+    } else {
+      xGrid = 0.01;
+    }
+    for (let x = this.xMin; x <= this.xMax; x += xGrid) {
       const y = this.functionType(x);
       this.functionPoints.push({ x: this.toCanvasX(x, columnWidth), y: this.toCanvasY(y, columnWidth, canvas) });
     }
@@ -374,6 +384,7 @@ function setupAmida() {
     } else {
       // お楽しみコース
       RandomFunctionNumber = Math.floor(Math.random()*14);
+      // RandomFunctionNumber = 11;//13;//10
     }
     RandomFunctionNumbers.push(RandomFunctionNumber);
   }
@@ -525,9 +536,6 @@ function animateAmida(col, callback) {
   let state = "down"; // down or horizontal
   let targetX = x;
   const step = 2; // 下り速度
-  let x1;
-  let x2;
-  let passage_Y;
   let idx = 0;
   let horizontalPassageFunction;
 
@@ -556,7 +564,7 @@ function animateAmida(col, callback) {
     } else if (state === "horizontal") {
       // 横線を徐々に移動
       let dx = targetX - x;
-      if ((Math.sign(dx) > 0 && idx >= horizontalPassageFunction.functionPoints.length) || (Math.sign(dx) <= 0 && idx <= -1)) {
+      if ((Math.sign(dx) >= 0 && idx >= horizontalPassageFunction.functionPoints.length) || (Math.sign(dx) <= 0 && idx <= -1)) {
         state = "down"; // 横移動終わり
         y += step + 1;
       } else {
