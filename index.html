@@ -36,6 +36,11 @@
     </ol>
     <label>人数: <input type="number" id="numPlayers" min="2" max="6" value="" size="2"></label><br>
     <div id="nameInputs"></div>
+    <label>再生速度:
+      <input type="radio" name="playbackSpeed" value="1倍速" checked> 1倍速
+      <input type="radio" name="playbackSpeed" value="2倍速"> 2倍速
+      <input type="radio" name="playbackSpeed" value="4倍速"> 4倍速
+    </label><br>
     <button id="startGame">開始する</button>
   </section>
 
@@ -43,9 +48,12 @@
   <section id="amida">
     <h2 id="currentPlayerTitle"></h2>
     <canvas id="amidaCanvas" width="700" height="500"></canvas>
+    <div id="playbackSpeedContents">
+      <div id="playbackSpeedText">再生速度:&nbsp;</div>
+      <div id="playbackSpeed"></div>
+    </div>
     <div id="fastForwardButtons">
       <button id="slowButton">&lt;</button>
-      <div id="playbackSpeed">1倍速</div>
       <button id="fastForwardButton">&gt;</button>
     </div>
     <div id="start-buttons"></div>

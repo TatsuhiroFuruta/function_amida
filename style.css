@@ -130,6 +130,16 @@ canvas {
   justify-content: center;
 }
 
+#playbackSpeedContents {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#playbackSpeedText {
+  /* display: block; */
+}
+
 #playbackSpeed {
   /* display: none; */
 }
