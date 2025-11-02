@@ -227,6 +227,9 @@ let columnWidth;
 let topY = 20;
 let bottomY = 480;
 let mathematicalFunctions = [];
+let timeStep = 16;
+const timeSteps = {'1倍速': 16, '2倍速': 8, '4倍速':4};
+let interval;
 
 // コース選択画面への遷移
 document.getElementById('toCourseSelection').onclick = () => {
@@ -326,6 +329,22 @@ function removeValidationMessages(flash, id) {
     flash.removeChild(removeElement);
   }
 }
+
+const fastForwardButtons = document.getElementById('fastForwardButtons');
+
+const fastForwardButton = fastForwardButtons.querySelector('#fastForwardButton');
+fastForwardButton.addEventListener('click', () => {
+  const playbackSpeed = fastForwardButtons.querySelector('#playbackSpeed');
+  // playbackSpeed.textContent = '2倍速';
+  // console.log(playbackSpeed.textContent);
+  if (playbackSpeed.textContent === '1倍速') {
+    playbackSpeed.textContent = '2倍速';
+    timeStep = timeSteps['2倍速'];
+  } else if (playbackSpeed.textContent === '2倍速') {
+    playbackSpeed.textContent = '4倍速';
+    timeStep = timeSteps['4倍速'];
+  }
+});
 
 // 阿弥陀籤画面への遷移
 document.getElementById('startGame').onclick = () => {
@@ -432,7 +451,7 @@ function setupAmida() {
 
 function drawAmida() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = '#333';
+  ctx.strokeStyle = '#181818';
   ctx.lineWidth = 2;
 
   for (let i = 0; i < numPlayers; i++) {
@@ -497,6 +516,10 @@ function chooseColumn(colIndex) {
     showCurrentPlayer();
   } else {
     //全員選び終わり
+    // const playbackSpeed = document.getElementById('playbackSpeed');
+    // playbackSpeed.style.display = 'flex';
+    // const fastForwardButtons = document.getElementById('fastForwardButtons');
+    fastForwardButtons.style.display = 'flex';
     startSequentialAnimation(0);
   }
 }
@@ -520,7 +543,7 @@ function startSequentialAnimation(i) {
   btn.classList.add('start-button');
   btn.addEventListener('click', (e) => {
     e.target.style.display = 'none';
-    animateAmida(choices[i], goal => {
+    animateAmida(choices[i], timeStep, goal => {
       results.push({ player: playerNames[i], goal: goal });
       drawAmida();
       startSequentialAnimation(i + 1); //次の人
@@ -529,7 +552,7 @@ function startSequentialAnimation(i) {
   startButtons.appendChild(btn);
 }
 
-function animateAmida(col, callback) {
+function animateAmida(col, timeStep, callback) {
   let xIndex = col;
   let x = columnWidth * (xIndex + 1);
   let y = 20;
@@ -539,7 +562,7 @@ function animateAmida(col, callback) {
   let idx = 0;
   let horizontalPassageFunction;
 
-  const interval = setInterval(() => {
+  function AmidaLogic() {
     if (state === "down") {
       // 横線チェック
       const nearPassageFunction = mathematicalFunctions.find(mF =>
@@ -584,5 +607,54 @@ function animateAmida(col, callback) {
       clearInterval(interval);
       callback(x);
     }
-  }, 16);
+  }
+
+  interval = setInterval(AmidaLogic, timeStep);
+
+  // const interval = setInterval(() => {
+  //   if (state === "down") {
+  //     // 横線チェック
+  //     const nearPassageFunction = mathematicalFunctions.find(mF =>
+  //       (mF.functionPassage.x.from === xIndex && Math.abs(mF.functionPassage.y.from - y) < 2) || (mF.functionPassage.x.to === xIndex && Math.abs(mF.functionPassage.y.to - y) < 2)
+  //     );
+  //     if (nearPassageFunction) {
+  //       nearPassageFunction.functionPassage.boxVisible = false;
+  //       // 横移動に切り替え
+  //       if (nearPassageFunction.functionPassage.x.from === xIndex) {
+  //         xIndex = nearPassageFunction.functionPassage.x.to;
+  //         idx = 0;
+  //       } else if (nearPassageFunction.functionPassage.x.to === xIndex) {
+  //         xIndex = nearPassageFunction.functionPassage.x.from;
+  //         idx = nearPassageFunction.functionPoints.length - 1;
+  //       }
+  //       targetX = columnWidth * (xIndex + 1);
+  //       horizontalPassageFunction = nearPassageFunction;
+  //       state = "horizontal";
+  //     } else {
+  //       y += step; // 縦移動
+  //     }
+  //   } else if (state === "horizontal") {
+  //     // 横線を徐々に移動
+  //     let dx = targetX - x;
+  //     if ((Math.sign(dx) >= 0 && idx >= horizontalPassageFunction.functionPoints.length) || (Math.sign(dx) <= 0 && idx <= -1)) {
+  //       state = "down"; // 横移動終わり
+  //       y += step + 1;
+  //     } else {
+  //       p = horizontalPassageFunction.functionPoints[idx];
+  //       x = p.x;
+  //       y = p.y;
+  //       idx += Math.sign(dx);
+  //     }
+  //   }
+  //   drawAmida();
+  //   ctx.fillStyle = 'red';
+  //   ctx.beginPath();
+  //   ctx.arc(x, y, 8, 0, 2 * Math.PI);
+  //   ctx.fill();
+
+  //   if (y > canvas.height - 20) {
+  //     clearInterval(interval);
+  //     callback(x);
+  //   }
+  // }, timeStep);
 }

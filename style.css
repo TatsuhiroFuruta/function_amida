@@ -124,6 +124,16 @@ canvas {
   background-color: #6495ed;
 }
 
+#fastForwardButtons {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#playbackSpeed {
+  /* display: none; */
+}
+
 /* スマホ用 */
 @media screen and (max-width: 479px) {
 
