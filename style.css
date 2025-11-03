@@ -78,9 +78,9 @@ canvas {
   margin-top: 150px;
 }
 
-#startGame {
-  margin-top: 15px;
-}
+/* #startGame { */
+  /* margin-top: 15px; */
+/* } */
 
 #start-buttons button {
   margin: 5px;
@@ -144,6 +144,11 @@ canvas {
   /* display: none; */
 }
 
+#playbackSpeedChoices {
+  display: inline-block;
+  margin: 10px 0 10px;
+}
+
 /* スマホ用 */
 @media screen and (max-width: 479px) {
 
@@ -153,6 +158,14 @@ canvas {
 
   #toCourseSelection {
     margin-top: 100px;
+  }
+
+  #settingTitle {
+  margin-block-end: 10px;
+}
+
+  ol {
+    width: 80%;
   }
 
   li {

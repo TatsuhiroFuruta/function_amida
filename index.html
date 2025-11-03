@@ -33,10 +33,11 @@
       <li>人数は2〜6人</li>
       <li>名前は任意。最大6文字まで。未入力及び空欄のみの場合は、「プレイヤー’番号’」（例：名前1なら「プレイヤー1」）になります。</li>
       <li>あみだの位置は上から設定した名前のプレイヤーから順番に決めていきます。</li>
+      <li>再生速度は、各プレイヤーの結果確認で「スタート」ボタンを押す前にも変更できます。</li>
     </ol>
     <label>人数: <input type="number" id="numPlayers" min="2" max="6" value="" size="2"></label><br>
     <div id="nameInputs"></div>
-    <label>再生速度:
+    <label id="playbackSpeedChoices">再生速度:
       <input type="radio" name="playbackSpeed" value="1倍速" checked> 1倍速
       <input type="radio" name="playbackSpeed" value="2倍速"> 2倍速
       <input type="radio" name="playbackSpeed" value="4倍速"> 4倍速
