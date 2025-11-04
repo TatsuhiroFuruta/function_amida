@@ -78,10 +78,6 @@ canvas {
   margin-top: 150px;
 }
 
-/* #startGame { */
-  /* margin-top: 15px; */
-/* } */
-
 #start-buttons button {
   margin: 5px;
 }
@@ -124,29 +120,42 @@ canvas {
   background-color: #6495ed;
 }
 
-#fastForwardButtons {
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-
 #playbackSpeedContents {
   display: none;
   align-items: center;
   justify-content: center;
-}
-
-#playbackSpeedText {
-  /* display: block; */
-}
-
-#playbackSpeed {
-  /* display: none; */
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
 #playbackSpeedChoices {
   display: inline-block;
   margin: 10px 0 10px;
+}
+
+#fastForwardButtons {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+#fastForwardButton, #slowButton {
+  background: #c0c0c0;
+  padding: 12px 16px;
+  margin-left:5px;
+}
+
+#fastForwardButton:hover, #slowButton:hover {
+  background: #a9a9a9;
+}
+
+#oneSpeed {
+  margin-right: 5px;
+}
+
+#twoSpeed {
+  margin-right: 5px;
 }
 
 /* スマホ用 */
@@ -179,5 +188,9 @@ canvas {
   #currentPlayerTitle {
     font-size: 16px;
     margin-top: 100px;
+  }
+
+  #playbackSpeedContents {
+    font-size: 16px;
   }
 }
