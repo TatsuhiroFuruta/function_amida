@@ -31,7 +31,17 @@ class mathematicalFunction {
   }
 
   generateFunctionPoints(columnWidth, canvas) {
-    for (let x = this.xMin; x <= this.xMax; x += 0.01) {
+    let xGrid;
+    if (['arctan'].includes(this.functionName)) {
+      xGrid = 0.08;
+    } else if (['tanh'].includes(this.functionName)) {
+      xGrid = 0.05;
+    } else if (['sin', 'cos', 'sinh', 'cosh'].includes(this.functionName)) {
+      xGrid = 0.02;
+    } else {
+      xGrid = 0.01;
+    }
+    for (let x = this.xMin; x <= this.xMax; x += xGrid) {
       const y = this.functionType(x);
       this.functionPoints.push({ x: this.toCanvasX(x, columnWidth), y: this.toCanvasY(y, columnWidth, canvas) });
     }
@@ -217,6 +227,8 @@ let columnWidth;
 let topY = 20;
 let bottomY = 480;
 let mathematicalFunctions = [];
+let timeStep = 16;
+const timeSteps = {'1倍速': 16, '2倍速': 8, '4倍速':4};
 
 // コース選択画面への遷移
 document.getElementById('toCourseSelection').onclick = () => {
@@ -317,10 +329,42 @@ function removeValidationMessages(flash, id) {
   }
 }
 
+const playbackSpeedContents = document.getElementById('playbackSpeedContents');
+
+const fastForwardButtons = document.getElementById('fastForwardButtons');
+
+// 早送り再生ボタン
+const fastForwardButton = fastForwardButtons.querySelector('#fastForwardButton');
+const playbackSpeed = playbackSpeedContents.querySelector('#playbackSpeed');
+fastForwardButton.addEventListener('click', () => {
+  if (playbackSpeed.textContent === '1倍速') {
+    playbackSpeed.textContent = '2倍速';
+    timeStep = timeSteps['2倍速'];
+  } else if (playbackSpeed.textContent === '2倍速') {
+    playbackSpeed.textContent = '4倍速';
+    timeStep = timeSteps['4倍速'];
+  }
+});
+
+// ゆっくり再生ボタン
+const slowButton = fastForwardButtons.querySelector('#slowButton');
+slowButton.addEventListener('click', () => {
+  if (playbackSpeed.textContent === '2倍速') {
+    playbackSpeed.textContent = '1倍速';
+    timeStep = timeSteps['1倍速'];
+  } else if (playbackSpeed.textContent === '4倍速') {
+    playbackSpeed.textContent = '2倍速';
+    timeStep = timeSteps['2倍速'];
+  }
+});
+
 // 阿弥陀籤画面への遷移
 document.getElementById('startGame').onclick = () => {
   if(!validateSettings()) return;
   document.getElementById('endButton').style.display = 'none';
+  let selectedPlaybackSpeed = document.querySelector('[name="playbackSpeed"]:checked').value;
+  playbackSpeed.textContent = selectedPlaybackSpeed;
+  timeStep = timeSteps[selectedPlaybackSpeed];
   numPlayers = parseInt(document.getElementById('numPlayers').value);
   playerNames = [];
   for (let i = 0; i < numPlayers; i++) {
@@ -337,6 +381,8 @@ document.getElementById('startGame').onclick = () => {
 document.getElementById('endButton').onclick = () => {
   //終了ボタンを押した後でも boxVisible を true にできる！
   mathematicalFunctions = [];
+  fastForwardButtons.style.display = 'none';
+  playbackSpeedContents.style.display = 'none';
   showSection('title');
 };
 
@@ -421,7 +467,7 @@ function setupAmida() {
 
 function drawAmida() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = '#333';
+  ctx.strokeStyle = '#181818';
   ctx.lineWidth = 2;
 
   for (let i = 0; i < numPlayers; i++) {
@@ -486,6 +532,8 @@ function chooseColumn(colIndex) {
     showCurrentPlayer();
   } else {
     //全員選び終わり
+    playbackSpeedContents.style.display = 'flex';
+    fastForwardButtons.style.display = 'flex';
     startSequentialAnimation(0);
   }
 }
@@ -507,9 +555,13 @@ function startSequentialAnimation(i) {
   const btn = document.createElement('button');
   btn.textContent = `スタート`;
   btn.classList.add('start-button');
+  fastForwardButton.style.display = 'block';
+  slowButton.style.display = 'block';
   btn.addEventListener('click', (e) => {
     e.target.style.display = 'none';
-    animateAmida(choices[i], goal => {
+    fastForwardButton.style.display = 'none';
+    slowButton.style.display = 'none';
+    animateAmida(choices[i], timeStep, goal => {
       results.push({ player: playerNames[i], goal: goal });
       drawAmida();
       startSequentialAnimation(i + 1); //次の人
@@ -518,16 +570,13 @@ function startSequentialAnimation(i) {
   startButtons.appendChild(btn);
 }
 
-function animateAmida(col, callback) {
+function animateAmida(col, timeStep, callback) {
   let xIndex = col;
   let x = columnWidth * (xIndex + 1);
   let y = 20;
   let state = "down"; // down or horizontal
   let targetX = x;
   const step = 2; // 下り速度
-  let x1;
-  let x2;
-  let passage_Y;
   let idx = 0;
   let horizontalPassageFunction;
 
@@ -556,7 +605,7 @@ function animateAmida(col, callback) {
     } else if (state === "horizontal") {
       // 横線を徐々に移動
       let dx = targetX - x;
-      if ((Math.sign(dx) > 0 && idx >= horizontalPassageFunction.functionPoints.length) || (Math.sign(dx) <= 0 && idx <= -1)) {
+      if ((Math.sign(dx) >= 0 && idx >= horizontalPassageFunction.functionPoints.length) || (Math.sign(dx) <= 0 && idx <= -1)) {
         state = "down"; // 横移動終わり
         y += step + 1;
       } else {
@@ -576,5 +625,5 @@ function animateAmida(col, callback) {
       clearInterval(interval);
       callback(x);
     }
-  }, 16);
+  }, timeStep);
 }
